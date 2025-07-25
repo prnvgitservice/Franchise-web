@@ -7,7 +7,7 @@ export const franchiseLogin = (data: any) => apiRequest("franchiseLogin", data)
 
 export const getFranchaseProfile = (franchiseId: string) => apiRequest("getFranchaseProfile", null, franchiseId);
 
-export const updateFranchaseProfile = (franchaseId: string, data: any) => apiRequest("updateUserProfile", data, franchaseId);
+export const updateFranchaseProfile = (formData: any) => apiRequest("updateFranchaseProfile", formData);
 
 export const getAllPincodes = () => apiRequest("getAllPincodes");
 

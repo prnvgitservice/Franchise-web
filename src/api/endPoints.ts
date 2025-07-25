@@ -18,7 +18,7 @@ const endpoints: any = {
 
   updateFranchaseProfile: {
     method: "put",
-    url: (franchiseId: string) => `/api/auth/profile/${franchiseId}`,
+    url: () => `/api/franchiseAuth/updateFranchise`,
   },
 
   
