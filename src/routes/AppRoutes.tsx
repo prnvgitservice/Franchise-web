@@ -10,6 +10,11 @@ import Technicians from '../components/FranchiseHomePage/Technicians';
 import Earnings from '../components/FranchiseHomePage/Earning';
 import Refer from '../components/FranchiseHomePage/ReferTechnician';
 import FranchiseLayout from '../components/layout/FranchiseLayout';
+import CategoriesPage from '../pages/CategoriesPage';
+import AboutUs from '../pages/AboutPage';
+import SubscriptionPage from '../pages/SubscriptionPage';
+import KeyFeaturesPage from '../pages/KeyFeaturesPage';
+import PlanDetailsPage from '../pages/PlanDetailsPage';
 
 const AppRoutes = () => {
     return (
@@ -25,6 +30,11 @@ const AppRoutes = () => {
                 <Route path="/technicians" element={<Technicians />} />
                 <Route path="/earnings" element={<Earnings />} />
                 <Route path="/refer" element={<Refer />} />
+                <Route path="/categories" element={<CategoriesPage />} />
+                <Route path="/about" element={<AboutUs />} />
+                <Route path="/subscription" element={<SubscriptionPage />} />
+                <Route path="/subscription/:subscriptionId" element={<PlanDetailsPage/>} />
+                <Route path="/key-features" element={<KeyFeaturesPage />} />
             </Route>
 
 

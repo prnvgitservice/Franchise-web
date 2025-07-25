@@ -9,6 +9,7 @@ export const getFranchaseProfile = (franchiseId: string) => apiRequest("getFranc
 
 export const updateFranchaseProfile = (formData: any) => apiRequest("updateFranchaseProfile", formData);
 
-export const getAllPincodes = () => apiRequest("getAllPincodes");
-
 export const createCompanyReview = (formData: any) => apiRequest('createCompanyReview',formData)
+  export const getAllPincodes = () => apiRequest("getAllPincodes");
+  export const getAllCategories = (data: any) => apiRequest("getAllCategories", data);
+  export const getPlans = (data: any) => apiRequest("getPlans",data);

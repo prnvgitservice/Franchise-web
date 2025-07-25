@@ -21,16 +21,29 @@ const endpoints: any = {
     url: () => `/api/franchiseAuth/updateFranchise`,
   },
 
+
+      createCompanyReview: {
+    method: "post",
+    url:"/api/companyReview/createReview"
+  },
+
+    getAllCategories: {
+    method: "get",
+    url: () => {
+      return `/api/categories/get`;
+    },
+  },
+
+   getPlans: {
+    method: "get",
+    url: () => {
+      return `/api/subscriptions/plans`;
+    }
+  },
   
   getAllPincodes: {
     method: "get",
     url: () => `/api/pincodes/allAreas`
-  },
-
-  createCompanyReview: {
-    method: "post",
-    url:"/api/companyReview/createReview"
-  },
-};
+  }
 
 export default endpoints;
