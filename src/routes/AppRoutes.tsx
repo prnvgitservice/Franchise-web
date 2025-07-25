@@ -8,7 +8,7 @@ import Dashboard from '../components/FranchiseHomePage/Dashboard';
 import Profile from '../components/FranchiseHomePage/Profile';
 import Technicians from '../components/FranchiseHomePage/Technicians';
 import Earnings from '../components/FranchiseHomePage/Earning';
-import Refer from '../components/FranchiseHomePage/ReferTechnician';
+// import Refer from '../components/FranchiseHomePage/ReferTechnician';
 import FranchiseLayout from '../components/layout/FranchiseLayout';
 import CategoriesPage from '../pages/CategoriesPage';
 import AboutUs from '../pages/AboutPage';
@@ -17,6 +17,7 @@ import KeyFeaturesPage from '../pages/KeyFeaturesPage';
 import PlanDetailsPage from '../pages/PlanDetailsPage';
 import AddTechnician from '../components/FranchiseHomePage/AddTechnician';
 import BuySubscription from '../components/FranchiseHomePage/BuySubscription';
+import TechnicianView from '../components/FranchiseHomePage/TechinicianView';
 
 const AppRoutes = () => {
     return (
@@ -33,6 +34,8 @@ const AppRoutes = () => {
                 <Route path="/addTechnician" element={<AddTechnician />} />
                 <Route path="/earnings" element={<Earnings />} />
                 <Route path="/buyPlan" element={<BuySubscription />} />
+                <Route path="/technician/:id" element={<TechnicianView />} />
+                
                 {/* <Route path="/refer" element={<Refer />} /> */}
             </Route>
 
