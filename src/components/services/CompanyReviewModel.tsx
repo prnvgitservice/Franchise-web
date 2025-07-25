@@ -7,17 +7,17 @@ interface ReviewModalProps {
   setShowReviewModal: (show: boolean) => void;
 }
 
-interface AuthenticatedUser {
-  id: string;
-  role: 'user' | 'technician';
-  username?: string;
-}
-
 interface ReviewData {
-  [key: string]: string | number;
-  role: string;
+  franchiseId: string;
+  role: 'franchise';
   rating: number;
   comment: string;
+}
+
+interface AuthenticatedUser {
+  id: string;
+  username: string;
+  role: 'franchise';
 }
 
 const CompanyReviewModal: React.FC<ReviewModalProps> = ({ showReviewModal, setShowReviewModal }) => {
@@ -36,6 +36,7 @@ const CompanyReviewModal: React.FC<ReviewModalProps> = ({ showReviewModal, setSh
       setShowReviewModal(false);
       setSelectedRating(0);
       setComment('');
+      setError(null);
     }
   };
 
@@ -79,17 +80,32 @@ const CompanyReviewModal: React.FC<ReviewModalProps> = ({ showReviewModal, setSh
 
     try {
       const response = await createCompanyReview(reviewData);
-      if (response) {
+      if (response?.success) {
         alert('Thank you for your review!');
         setShowReviewModal(false);
         setSelectedRating(0);
         setComment('');
       } else {
-        alert('Failed to submit review. Please try again.');
+        throw new Error(response?.error?.[0] || response?.message || 'Failed to submit review.');
       }
-    } catch (error) {
-      alert('Something went wrong while submitting the review.');
-      console.error('Review submission error:', error);
+    } catch (err: any) {
+      let errorMessage = 'An error occurred. Please try again.';
+      if (err.response?.status === 401) {
+        errorMessage = 'Unauthorized. Please log in again.';
+      } else if (err.response?.status === 400) {
+        errorMessage = err.response?.data?.error?.[0] || 'Invalid review data.';
+      } else if (err.response?.status === 429) {
+        errorMessage = 'Too many requests. Please try again later.';
+      } else if (err.response?.status >= 500) {
+        errorMessage = 'Server error. Please try again later.';
+      } else if (err.message.includes('Network Error')) {
+        errorMessage = 'Network error. Please check your connection.';
+      } else {
+        errorMessage = err.message || errorMessage;
+      }
+      setError(errorMessage);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -117,7 +133,6 @@ const CompanyReviewModal: React.FC<ReviewModalProps> = ({ showReviewModal, setSh
             value={user?.username || 'Anonymous'}
             readOnly
           />
-
           <p className="text-sm font-medium mb-2 text-gray-700">Rating</p>
           <div className="flex justify-center space-x-2 mb-8">
             {[1, 2, 3, 4, 5].map((star) => (
@@ -131,7 +146,6 @@ const CompanyReviewModal: React.FC<ReviewModalProps> = ({ showReviewModal, setSh
               />
             ))}
           </div>
-
           <p className="text-sm font-medium mb-2 text-gray-700">Comment</p>
           <textarea
             className="w-full p-2 border border-gray-300 rounded-lg mb-4"
@@ -142,7 +156,6 @@ const CompanyReviewModal: React.FC<ReviewModalProps> = ({ showReviewModal, setSh
             required
             maxLength={500}
           />
-
           <div className="flex justify-end space-x-2">
             <button
               type="submit"

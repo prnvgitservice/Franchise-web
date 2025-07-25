@@ -45,5 +45,5 @@ const endpoints: any = {
     method: "get",
     url: () => `/api/pincodes/allAreas`
   }
-
+}
 export default endpoints;
