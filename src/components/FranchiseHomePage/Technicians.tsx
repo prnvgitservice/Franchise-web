@@ -14,7 +14,6 @@ const Technicians: React.FC = () => {
       specialty: 'HVAC Specialist',
       rating: 4.9,
       location: 'Mumbai, Maharashtra',
-      status: 'Available',
       services: 156,
       joinDate: '2024-01-15',
       experience: '8 years'
@@ -27,7 +26,6 @@ const Technicians: React.FC = () => {
       specialty: 'Plumbing Expert',
       rating: 4.7,
       location: 'Delhi, NCR',
-      status: 'Busy',
       services: 89,
       joinDate: '2024-02-20',
       experience: '5 years'
@@ -53,7 +51,6 @@ const Technicians: React.FC = () => {
       specialty: 'Appliance Repair',
       rating: 4.6,
       location: 'Hyderabad, Telangana',
-      status: 'Available',
       services: 67,
       joinDate: '2024-03-05',
       experience: '3 years'
@@ -66,7 +63,6 @@ const Technicians: React.FC = () => {
       specialty: 'HVAC & Plumbing',
       rating: 4.9,
       location: 'Jaipur, Rajasthan',
-      status: 'Offline',
       services: 198,
       joinDate: '2023-09-12',
       experience: '12 years'
@@ -120,7 +116,7 @@ const Technicians: React.FC = () => {
               className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
           </div>
-          <div className="flex items-center space-x-2">
+          {/* <div className="flex items-center space-x-2">
             <Filter className="h-5 w-5 text-gray-400" />
             <select
               value={filterStatus}
@@ -132,7 +128,7 @@ const Technicians: React.FC = () => {
               <option value="busy">Busy</option>
               <option value="offline">Offline</option>
             </select>
-          </div>
+          </div> */}
         </div>
       </div>
 
@@ -143,14 +139,14 @@ const Technicians: React.FC = () => {
             <thead className="bg-gray-50 border-b border-gray-200">
               <tr>
                 <th className="text-left py-4 px-6 font-semibold text-gray-700">Technician</th>
-                <th className="text-left py-4 px-6 font-semibold text-gray-700">Contact</th>
-                <th className="text-left py-4 px-6 font-semibold text-gray-700">Specialty</th>
-                <th className="text-left py-4 px-6 font-semibold text-gray-700">Location</th>
+                <th className="text-left py-4 px-6 font-semibold text-gray-700">Mobile</th>
+                <th className="text-left py-4 px-6 font-semibold text-gray-700">Category</th>
+                <th className="text-left py-4 px-6 font-semibold text-gray-700">Address</th>
                 <th className="text-left py-4 px-6 font-semibold text-gray-700">Rating</th>
                 <th className="text-left py-4 px-6 font-semibold text-gray-700">Services</th>
                 <th className="text-left py-4 px-6 font-semibold text-gray-700">Experience</th>
-                <th className="text-left py-4 px-6 font-semibold text-gray-700">Status</th>
-                <th className="text-left py-4 px-6 font-semibold text-gray-700">Actions</th>
+                {/* <th className="text-left py-4 px-6 font-semibold text-gray-700">Status</th> */}
+                <th className="text-left py-4 px-6 font-semibold text-gray-700">Action</th>
               </tr>
             </thead>
             <tbody>
@@ -164,19 +160,19 @@ const Technicians: React.FC = () => {
                         </span>
                       </div>
                       <div>
-                        <h4 className="font-semibold text-gray-900">{tech.name}</h4>
+                        <h4 className="font-semibold text-gray-900 whitespace-nowrap">{tech.name}</h4>
                         <p className="text-sm text-gray-500">ID: {tech.id.toString().padStart(3, '0')}</p>
                       </div>
                     </div>
                   </td>
                   <td className="py-4 px-6">
                     <div className="space-y-1">
-                      <div className="flex items-center text-sm text-gray-700">
+                      {/* <div className="flex items-center text-sm text-gray-700">
                         <Mail className="h-3 w-3 mr-2 text-gray-400" />
                         {tech.email}
-                      </div>
-                      <div className="flex items-center text-sm text-gray-700">
-                        <Phone className="h-3 w-3 mr-2 text-gray-400" />
+                      </div> */}
+                      <div className="flex items-center text-sm text-gray-700 whitespace-nowrap">
+                        {/* <Phone className="h-3 w-3 mr-2 text-gray-400 " /> */}
                         {tech.phone}
                       </div>
                     </div>
@@ -186,7 +182,7 @@ const Technicians: React.FC = () => {
                   </td>
                   <td className="py-4 px-6">
                     <div className="flex items-center text-sm text-gray-700">
-                      <MapPin className="h-3 w-3 mr-1 text-gray-400" />
+                      {/* <MapPin className="h-3 w-3 mr-1 text-gray-400" /> */}
                       {tech.location}
                     </div>
                   </td>
@@ -202,22 +198,22 @@ const Technicians: React.FC = () => {
                   <td className="py-4 px-6">
                     <span className="text-gray-700">{tech.experience}</span>
                   </td>
-                  <td className="py-4 px-6">
+                  {/* <td className="py-4 px-6">
                     <span className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusColor(tech.status)}`}>
                       {tech.status}
                     </span>
-                  </td>
+                  </td> */}
                   <td className="py-4 px-6">
                     <div className="flex space-x-2">
                       <button className="text-blue-600 hover:text-blue-700 text-sm font-medium transition-colors duration-200">
-                         <Eye />
+                         <Eye size={18}/>
                       </button>
                       <button className="text-green-600 hover:text-green-700 text-sm font-medium transition-colors duration-200">
-                        <SquarePen />
+                        <SquarePen size={16}/>
                       </button>
-                      <button className="text-red-600 hover:text-red-700 text-sm font-medium transition-colors duration-200">
+                      {/* <button className="text-red-600 hover:text-red-700 text-sm font-medium transition-colors duration-200">
                         <Trash />
-                      </button>
+                      </button> */}
                     </div>
                   </td>
                 </tr>
