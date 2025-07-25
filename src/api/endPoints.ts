@@ -44,6 +44,11 @@ const endpoints: any = {
   getAllPincodes: {
     method: "get",
     url: () => `/api/pincodes/allAreas`
+  },
+
+  registerTechByFranchise:{
+    method:'post',
+    url: () => `/api/techAuth/registerByFranchise`
   }
 }
 export default endpoints;

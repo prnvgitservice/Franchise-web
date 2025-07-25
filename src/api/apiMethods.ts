@@ -17,3 +17,5 @@ export const getAllCategories = (data: any) =>apiRequest("getAllCategories", dat
 
 export const getPlans = (data: any) => apiRequest("getPlans", data);
 
+export const registerTechByFranchise = (data: any) => apiRequest('registerTechByFranchise', data)
+
