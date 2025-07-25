@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { Users, Search, Plus, Star, MapPin, Phone, Mail, Filter, SquarePen, Eye, Trash } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const Technicians: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [filterStatus, setFilterStatus] = useState('all');
+  const navigate = useNavigate();
 
   const technicians = [
     {
@@ -97,7 +99,9 @@ const Technicians: React.FC = () => {
           <h1 className="text-2xl font-bold text-gray-900">Technicians Management</h1>
           <p className="text-gray-600 mt-1">Manage and monitor all technicians in your network</p>
         </div>
-        <button className="mt-4 sm:mt-0 bg-blue-600 text-white px-4 py-2 rounded-xl hover:bg-blue-700 transition-colors duration-200 flex items-center">
+        <button 
+        className="mt-4 sm:mt-0 bg-blue-600 text-white px-4 py-2 rounded-xl hover:bg-blue-700 transition-colors duration-200 flex items-center"
+        onClick={()=> navigate('/addTechnician')}>
           <Plus className="h-4 w-4 mr-2" />
           Add Technician
         </button>

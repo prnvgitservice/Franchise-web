@@ -86,7 +86,7 @@ function Header() {
               ['about', 'About Us'],
               ['subscription', 'Subscriptions'],
               ['features', 'Key Features'],
-              ['franchise', 'Franchise'],
+              // ['franchise', 'Franchise'],
             ] as [string, string][]).map(([path, label]) => (
               <Link
                 key={path}
@@ -167,7 +167,7 @@ function Header() {
               ['about', 'About Us'],
               ['subscription', 'Subscriptions'],
               ['features', 'Key Features'],
-              ['franchise', 'Franchise'],
+              // ['franchise', 'Franchise'],
             ] as [string, string][]).map(([path, label]) => (
               <Link
                 key={path}
@@ -182,7 +182,7 @@ function Header() {
             {user ? (
               <>
                 <Link
-                  to="/franchise/dashboard"
+                  to="/"
                   className="text-gray-700 hover:text-blue-600 py-2 text-base font-medium"
                   onClick={() => setMobileOpen(false)}
                 >
@@ -194,7 +194,7 @@ function Header() {
                 >
                   Logout
                 </button>
-                <button
+                {/* <button
                   onClick={() => {
                     setMobileOpen(false);
                     setShowReviewModal(true);
@@ -202,7 +202,7 @@ function Header() {
                   className="text-gray-700 hover:text-blue-600 py-2 text-base font-medium text-left"
                 >
                   Leave a Review
-                </button>
+                </button> */}
               </>
             ) : (
               <Link

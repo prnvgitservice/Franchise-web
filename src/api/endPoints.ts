@@ -49,6 +49,10 @@ const endpoints: any = {
   registerTechByFranchise:{
     method:'post',
     url: () => `/api/techAuth/registerByFranchise`
+  },
+   addTechSubscriptionPlan: {
+    method: "post",
+    url: () => `/api/technicianSubscription/addTechSubscriptionPlan`
   }
 }
 export default endpoints;

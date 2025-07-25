@@ -15,6 +15,8 @@ import AboutUs from '../pages/AboutPage';
 import SubscriptionPage from '../pages/SubscriptionPage';
 import KeyFeaturesPage from '../pages/KeyFeaturesPage';
 import PlanDetailsPage from '../pages/PlanDetailsPage';
+import AddTechnician from '../components/FranchiseHomePage/AddTechnician';
+import BuySubscription from '../components/FranchiseHomePage/BuySubscription';
 
 const AppRoutes = () => {
     return (
@@ -28,16 +30,18 @@ const AppRoutes = () => {
                 <Route path="/" element={<Dashboard />} />
                 <Route path="/profile" element={<Profile />} />
                 <Route path="/technicians" element={<Technicians />} />
+                <Route path="/addTechnician" element={<AddTechnician />} />
                 <Route path="/earnings" element={<Earnings />} />
-                <Route path="/refer" element={<Refer />} />
-                <Route path="/categories" element={<CategoriesPage />} />
-                <Route path="/about" element={<AboutUs />} />
-                <Route path="/subscription" element={<SubscriptionPage />} />
-                <Route path="/subscription/:subscriptionId" element={<PlanDetailsPage/>} />
-                <Route path="/key-features" element={<KeyFeaturesPage />} />
+                <Route path="/buyPlan" element={<BuySubscription />} />
+                {/* <Route path="/refer" element={<Refer />} /> */}
             </Route>
 
 
+            <Route path="/categories" element={<CategoriesPage />} />
+            <Route path="/about" element={<AboutUs />} />
+            <Route path="/subscription" element={<SubscriptionPage />} />
+            <Route path="/subscription/:subscriptionId" element={<PlanDetailsPage/>} />
+            <Route path="/key-features" element={<KeyFeaturesPage />} />
             
             <Route path="*" element={<NotFound />} />
         </Routes>

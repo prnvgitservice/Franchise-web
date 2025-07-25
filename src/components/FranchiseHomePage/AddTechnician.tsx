@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
-import { getAllPincodes, addTechnician } from '../../api/apiMethods'; // Assuming addTechnician API method
+import { getAllCategories, getAllPincodes, getPlans } from '../../api/apiMethods';
+import { useNavigate } from 'react-router-dom';
 
 interface TechnicianData {
   username: string;
@@ -13,6 +14,7 @@ interface TechnicianData {
   city: string;
   state: string;
   pincode: string;
+  subscriptionId: string;
 }
 
 interface PincodeData {
@@ -21,6 +23,14 @@ interface PincodeData {
   city: string;
   state: string;
   areas: { _id: string; name: string }[];
+}
+
+interface SubscriptionPlan {
+  _id: string;
+  name: string;
+  price: number;
+  finalPrice: number;
+  gst: number;
 }
 
 const initialFormState: TechnicianData = {
@@ -34,16 +44,20 @@ const initialFormState: TechnicianData = {
   city: '',
   state: '',
   pincode: '',
+  subscriptionId: '',
 };
 
 const AddTechnician: React.FC = () => {
   const [formData, setFormData] = useState<TechnicianData>(initialFormState);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [apiCategories, setApiCategories] = useState<{ _id: string; category_name: string; status: number }[]>([]);
   const [pincodeData, setPincodeData] = useState<PincodeData[]>([]);
+  const [subscriptionPlans, setSubscriptionPlans] = useState<SubscriptionPlan[]>([]);
   const [selectedPincode, setSelectedPincode] = useState<string>('');
   const [areaOptions, setAreaOptions] = useState<{ _id: string; name: string }[]>([]);
   const [showPassword, setShowPassword] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     getAllPincodes()
@@ -53,6 +67,38 @@ const AddTechnician: React.FC = () => {
         }
       })
       .catch(() => {});
+  }, []);
+
+  useEffect(() => {
+    getAllCategories(null)
+      .then((res: any) => {
+        if (Array.isArray(res?.data)) {
+          setApiCategories(res.data);
+        } else {
+          setApiCategories([]);
+          setError('Failed to load categories');
+        }
+      })
+      .catch(() => {
+        setApiCategories([]);
+        setError('Failed to load categories');
+      });
+  }, []);
+
+  useEffect(() => {
+    getPlans()
+      .then((res: any) => {
+        if (Array.isArray(res?.data)) {
+          setSubscriptionPlans(res.data);
+        } else {
+          setSubscriptionPlans([]);
+          setError('Failed to load subscription plans');
+        }
+      })
+      .catch(() => {
+        setSubscriptionPlans([]);
+        setError('Failed to load subscription plans');
+      });
   }, []);
 
   useEffect(() => {
@@ -103,6 +149,13 @@ const AddTechnician: React.FC = () => {
       setLoading(true);
 
       try {
+        const franchiseId = localStorage.getItem('userId');
+        if (!franchiseId) {
+          setError('Franchise ID not found. Please log in again.');
+          setLoading(false);
+          return;
+        }
+
         if (!formData.pincode || formData.pincode.length !== 6) {
           setError('Pincode must be exactly 6 digits');
           setLoading(false);
@@ -115,75 +168,92 @@ const AddTechnician: React.FC = () => {
           return;
         }
 
-        const payload = {
-          username: formData.username,
-          franchiseId: formData.franchiseId,
-          category: formData.category,
-          phoneNumber: formData.phoneNumber,
-          password: formData.password,
-          buildingName: formData.buildingName,
-          areaName: formData.areaName,
-          city: formData.city,
-          state: formData.state,
-          pincode: formData.pincode,
-        };
-
-        const response = await addTechnician(payload);
-
-        if (response?.success) {
-          setFormData(initialFormState); // Reset form on success
-          alert('Technician added successfully!');
-        } else {
-          throw new Error('Failed to add technician');
+        if (!formData.subscriptionId) {
+          setError('Please select a subscription plan');
+          setLoading(false);
+          return;
         }
+
+        const selectedPlan = subscriptionPlans.find((plan) => plan._id === formData.subscriptionId);
+        if (!selectedPlan) {
+          setError('Selected subscription plan is invalid');
+          setLoading(false);
+          return;
+        }
+
+        // Navigate to /buyPlan with plan and technician data
+        navigate('/buyPlan', {
+          state: {
+            plan: selectedPlan,
+            technicianData: { ...formData, franchiseId },
+          },
+        });
       } catch (err: any) {
-        setError(err?.data?.error?.[0] || err?.message || 'Failed to add technician. Please try again.');
+        setError(err?.data?.error?.[0] || err?.message || 'Failed to proceed. Please try again.');
       } finally {
         setLoading(false);
       }
     },
-    [formData]
+    [formData, subscriptionPlans, navigate]
   );
 
   return (
-    <div className="max-w-md mx-auto mt-10 p-6 bg-white rounded-lg shadow-xl">
-      <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">Add New Technician</h2>
+    <div className="max-w-3xl mx-auto mt-12 p-8 bg-gradient-to-br from-teal-50 to-indigo-50 rounded-xl shadow-2xl">
+      <h2 className="text-3xl font-extrabold text-indigo-900 mb-8 text-center">Add New Technician</h2>
       {error && (
-        <div className="text-red-600 text-sm text-center bg-red-50 p-2 rounded mb-4">{error}</div>
+        <div className="text-red-600 text-sm text-center bg-red-100 p-3 rounded-lg mb-6 animate-pulse">{error}</div>
       )}
-      <div className="space-y-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {[
-          { id: 'username', label: 'Username', type: 'text' },
-          { id: 'franchiseId', label: 'Franchise ID', type: 'text' },
-          { id: 'category', label: 'Category', type: 'text' },
-          { id: 'phoneNumber', label: 'Phone Number', type: 'tel', pattern: '[0-9]{10}' },
-          { id: 'password', label: 'Password', type: 'password', minLength: 6, maxLength: 10 },
-          { id: 'buildingName', label: 'Building Name', type: 'text' },
+          { id: 'username', label: 'Username', type: 'text', placeholder: 'Enter username' },
+          { id: 'category', label: 'Category', type: 'select' },
+          { id: 'phoneNumber', label: 'Phone Number', type: 'tel', pattern: '[0-9]{10}', placeholder: 'Enter 10-digit phone number' },
+          { id: 'password', label: 'Password', type: 'password', minLength: 6, maxLength: 10, placeholder: '6-10 characters' },
+          { id: 'buildingName', label: 'Building Name', type: 'text', placeholder: 'Enter building name' },
           { id: 'pincode', label: 'Pincode', type: 'select' },
           { id: 'areaName', label: 'Area', type: 'select' },
           { id: 'city', label: 'City', type: 'select' },
           { id: 'state', label: 'State', type: 'select' },
-        ].map(({ id, label, type, pattern, minLength, maxLength }) => (
-          <div key={id}>
-            <label htmlFor={id} className="block text-sm font-medium text-gray-700">
-              {label} <span className="text-red-600">*</span>
+          { id: 'subscriptionId', label: 'Subscription Plan', type: 'select' },
+        ].map(({ id, label, type, pattern, minLength, maxLength, placeholder }) => (
+          <div key={id} className="relative group">
+            <label htmlFor={id} className="block text-sm font-medium text-indigo-700 mb-1">
+              {label} <span className="text-amber-500">*</span>
             </label>
-            {id === 'password' ? (
+            {id === 'category' ? (
+              <select
+                id="category"
+                name="category"
+                value={formData.category}
+                onChange={handleChange}
+                required
+                className="mt-1 block w-full px-4 py-3 border border-indigo-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition duration-200 bg-white hover:bg-indigo-50"
+              >
+                <option value="" disabled>Select a category</option>
+                {apiCategories
+                  .filter((category) => category?.status === 1)
+                  .map((item) => (
+                    <option key={item._id} value={item._id}>
+                      {item.category_name}
+                    </option>
+                  ))}
+              </select>
+            ) : id === 'password' ? (
               <div className="relative">
                 <input
                   id={id}
                   name={id}
                   type={showPassword ? 'text' : 'password'}
-                  placeholder="Password (6-10 characters)"
+                  placeholder={placeholder}
                   required
                   value={formData[id as keyof TechnicianData]}
                   onChange={handleChange}
                   minLength={minLength}
                   maxLength={maxLength}
-                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                  className="mt-1 block w-full px-4 py-3 border border-indigo-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition duration-200 bg-white hover:bg-indigo-50 pr-10"
                 />
                 <span
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer text-gray-500"
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer text-indigo-500 hover:text-amber-500 transition"
                   onClick={() => setShowPassword((prev) => !prev)}
                 >
                   {showPassword ? <FaEyeSlash /> : <FaEye />}
@@ -196,9 +266,9 @@ const AddTechnician: React.FC = () => {
                 value={formData.pincode}
                 onChange={handleChange}
                 required
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                className="mt-1 block w-full px-4 py-3 border border-indigo-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition duration-200 bg-white hover:bg-indigo-50"
               >
-                <option value="">Select Pincode</option>
+                <option value="" disabled>Select Pincode</option>
                 {pincodeData.map((p) => (
                   <option key={p._id} value={p.code}>
                     {p.code}
@@ -213,9 +283,9 @@ const AddTechnician: React.FC = () => {
                 onChange={handleChange}
                 required
                 disabled={!selectedPincode}
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 disabled:bg-gray-100"
+                className="mt-1 block w-full px-4 py-3 border border-indigo-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition duration-200 bg-white hover:bg-indigo-50 disabled:bg-gray-100"
               >
-                <option value="">Select Area</option>
+                <option value="" disabled>Select Area</option>
                 {areaOptions.map((a) => (
                   <option key={a._id} value={a.name}>
                     {a.name}
@@ -230,9 +300,9 @@ const AddTechnician: React.FC = () => {
                 onChange={handleChange}
                 required
                 disabled={!selectedPincode}
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 disabled:bg-gray-100"
+                className="mt-1 block w-full px-4 py-3 border border-indigo-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition duration-200 bg-white hover:bg-indigo-50 disabled:bg-gray-100"
               >
-                <option value="">Select City</option>
+                <option value="" disabled>Select City</option>
                 {selectedPincode && pincodeData.find((p) => p.code === selectedPincode) && (
                   <option value={pincodeData.find((p) => p.code === selectedPincode)?.city}>
                     {pincodeData.find((p) => p.code === selectedPincode)?.city}
@@ -247,41 +317,795 @@ const AddTechnician: React.FC = () => {
                 onChange={handleChange}
                 required
                 disabled={!selectedPincode}
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 disabled:bg-gray-100"
+                className="mt-1 block w-full px-4 py-3 border border-indigo-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition duration-200 bg-white hover:bg-indigo-50 disabled:bg-gray-100"
               >
-                <option value="">Select State</option>
+                <option value="" disabled>Select State</option>
                 {selectedPincode && pincodeData.find((p) => p.code === selectedPincode) && (
                   <option value={pincodeData.find((p) => p.code === selectedPincode)?.state}>
                     {pincodeData.find((p) => p.code === selectedPincode)?.state}
                   </option>
                 )}
               </select>
+            ) : id === 'subscriptionId' ? (
+              <select
+                id="subscriptionId"
+                name="subscriptionId"
+                value={formData.subscriptionId}
+                onChange={handleChange}
+                required
+                className="mt-1 block w-full px-4 py-3 border border-indigo-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition duration-200 bg-white hover:bg-indigo-50"
+              >
+                <option value="" disabled>Select Subscription Plan</option>
+                {subscriptionPlans
+                  .filter((plan) => plan.name !== 'Free Plan')
+                  .map((plan) => (
+                    <option key={plan._id} value={plan._id}>
+                      {plan.name} - ₹{plan.finalPrice} ({plan.price} + {plan.gst} GST)
+                    </option>
+                  ))}
+              </select>
             ) : (
               <input
                 id={id}
                 name={id}
                 type={type}
-                placeholder={label}
+                placeholder={placeholder}
                 required
                 value={formData[id as keyof TechnicianData]}
                 onChange={handleChange}
                 pattern={pattern}
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                className="mt-1 block w-full px-4 py-3 border border-indigo-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition duration-200 bg-white hover:bg-indigo-50"
               />
             )}
           </div>
         ))}
-        <button
-          type="submit"
-          onClick={handleSubmit}
-          disabled={loading}
-          className="w-full bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:bg-gray-400 disabled:cursor-not-allowed"
-        >
-          {loading ? 'Adding Technician...' : 'Add Technician'}
-        </button>
       </div>
+      <button
+        type="submit"
+        onClick={handleSubmit}
+        disabled={loading}
+        className="mt-8 w-full bg-gradient-to-r from-indigo-600 to-teal-500 text-white py-3 px-6 rounded-lg font-semibold hover:from-indigo-700 hover:to-teal-600 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 disabled:bg-gray-400 disabled:cursor-not-allowed transition duration-300 transform hover:scale-105"
+      >
+        {loading ? (
+          <div className="flex items-center justify-center">
+            <svg className="animate-spin h-5 w-5 mr-3 text-white" viewBox="0 0 24 24">
+              <circle className="opacity-25" cx="e2c7a15-0674-40e6-a58b-9147c820d290" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8h8a8 8 0 01-8 8 8 8 0 01-8-8z" />
+            </svg>
+            Processing...
+          </div>
+        ) : (
+          'Proceed to Payment'
+        )}
+      </button>
     </div>
   );
 };
 
 export default AddTechnician;
+// import React, { useState, useCallback, useEffect } from 'react';
+// import { FaEye, FaEyeSlash } from 'react-icons/fa';
+// import { getAllCategories, getAllPincodes, registerTechByFranchise, getPlans } from '../../api/apiMethods';
+// import { useNavigate } from 'react-router-dom';
+
+// interface TechnicianData {
+//   username: string;
+//   franchiseId: string;
+//   category: string;
+//   phoneNumber: string;
+//   password: string;
+//   buildingName: string;
+//   areaName: string;
+//   city: string;
+//   state: string;
+//   pincode: string;
+//   subscriptionId: string;
+// }
+
+// interface PincodeData {
+//   _id: string;
+//   code: string;
+//   city: string;
+//   state: string;
+//   areas: { _id: string; name: string }[];
+// }
+
+// interface SubscriptionPlan {
+//   _id: string;
+//   name: string;
+//   price: number;
+//   finalPrice: number;
+//   gst: number
+// }
+
+// const initialFormState: TechnicianData = {
+//   username: '',
+//   franchiseId: '',
+//   category: '',
+//   phoneNumber: '',
+//   password: '',
+//   buildingName: '',
+//   areaName: '',
+//   city: '',
+//   state: '',
+//   pincode: '',
+//   subscriptionId: '',
+// };
+
+// const AddTechnician: React.FC = () => {
+//   const [formData, setFormData] = useState<TechnicianData>(initialFormState);
+//   const [error, setError] = useState<string | null>(null);
+//   const [loading, setLoading] = useState(false);
+//   const [apiCategories, setApiCategories] = useState<{ _id: string; category_name: string; status: number }[]>([]);
+//   const [pincodeData, setPincodeData] = useState<PincodeData[]>([]);
+//   const [subscriptionPlans, setSubscriptionPlans] = useState<SubscriptionPlan[]>([]);
+//   const [selectedPincode, setSelectedPincode] = useState<string>('');
+//   const [areaOptions, setAreaOptions] = useState<{ _id: string; name: string }[]>([]);
+//   const [showPassword, setShowPassword] = useState(false);
+//   const navigate = useNavigate()
+
+//   useEffect(() => {
+//     getAllPincodes()
+//       .then((res: any) => {
+//         if (Array.isArray(res?.data)) {
+//           setPincodeData(res.data);
+//         }
+//       })
+//       .catch(() => {});
+//   }, []);
+
+//   useEffect(() => {
+//     getAllCategories(null)
+//       .then((res: any) => {
+//         if (Array.isArray(res?.data)) {
+//           setApiCategories(res.data);
+//         } else {
+//           setApiCategories([]);
+//           setError('Failed to load categories');
+//         }
+//       })
+//       .catch(() => {
+//         setApiCategories([]);
+//         setError('Failed to load categories');
+//       });
+//   }, []);
+
+//   useEffect(() => {
+//     getPlans()
+//       .then((res: any) => {
+//         if (Array.isArray(res?.data)) {
+//             console.log(res)
+//           setSubscriptionPlans(res.data);
+//         } else {
+//           setSubscriptionPlans([]);
+//           setError('Failed to load subscription plans');
+//         }
+//       })
+//       .catch(() => {
+//         setSubscriptionPlans([]);
+//         setError('Failed to load subscription plans');
+//       });
+//   }, []);
+
+//   useEffect(() => {
+//     if (selectedPincode) {
+//       const found = pincodeData.find((p) => p.code === selectedPincode);
+//       if (found && found.areas) {
+//         setAreaOptions(found.areas);
+//         setFormData((prev) => ({
+//           ...prev,
+//           city: found.city,
+//           state: found.state,
+//         }));
+//       } else {
+//         setAreaOptions([]);
+//         setFormData((prev) => ({
+//           ...prev,
+//           city: '',
+//           state: '',
+//           areaName: '',
+//         }));
+//       }
+//     } else {
+//       setAreaOptions([]);
+//       setFormData((prev) => ({
+//         ...prev,
+//         city: '',
+//         state: '',
+//         areaName: '',
+//       }));
+//     }
+//   }, [selectedPincode, pincodeData]);
+
+//   const handleChange = useCallback(
+//     (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+//       const { name, value } = e.target;
+//       setFormData((prev) => ({ ...prev, [name]: value }));
+//       if (name === 'pincode') {
+//         setSelectedPincode(value);
+//       }
+//     },
+//     []
+//   );
+
+//   const handleSubmit = useCallback(
+    
+//     async (e: React.FormEvent) => {
+//         navigate('/buyPlans', { state: { plan } } )
+//       e.preventDefault();
+//       setError(null);
+//       setLoading(true);
+
+//       try {
+//         const franchiseId = localStorage.getItem('userId');
+//         if (!franchiseId) {
+//           setError('Franchise ID not found. Please log in again.');
+//           setLoading(false);
+//           return;
+//         }
+
+//         if (!formData.pincode || formData.pincode.length !== 6) {
+//           setError('Pincode must be exactly 6 digits');
+//           setLoading(false);
+//           return;
+//         }
+
+//         if (!/^\d{10}$/.test(formData.phoneNumber)) {
+//           setError('Phone number must be exactly 10 digits');
+//           setLoading(false);
+//           return;
+//         }
+
+//         if (!formData.subscriptionId) {
+//           setError('Please select a subscription plan');
+//           setLoading(false);
+//           return;
+//         }
+
+//         const payload = {
+//           username: formData.username,
+//           franchiseId,
+//           category: formData.category,
+//           phoneNumber: formData.phoneNumber,
+//           password: formData.password,
+//           buildingName: formData.buildingName,
+//           areaName: formData.areaName,
+//           city: formData.city,
+//           state: formData.state,
+//           pincode: formData.pincode,
+//           subscriptionId: formData.subscriptionId,
+//         };
+
+//         const response = await registerTechByFranchise(payload);
+
+//         if (response?.success) {
+//           setFormData(initialFormState);
+//           alert('Technician added successfully!');
+//         } else {
+//           throw new Error('Failed to add technician');
+//         }
+//       } catch (err: any) {
+//         setError(err?.data?.error?.[0] || err?.message || 'Failed to add technician. Please try again.');
+//       } finally {
+//         setLoading(false);
+//       }
+//     },
+//     [formData]
+//   );
+
+//   return (
+//     <div className="max-w-3xl mx-auto mt-12 p-8 bg-gradient-to-br from-teal-50 to-indigo-50 rounded-xl shadow-2xl">
+//       <h2 className="text-3xl font-extrabold text-indigo-900 mb-8 text-center">Add New Technician</h2>
+//       {error && (
+//         <div className="text-red-600 text-sm text-center bg-red-100 p-3 rounded-lg mb-6 animate-pulse">{error}</div>
+//       )}
+//       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+//         {[
+//           { id: 'username', label: 'Username', type: 'text', placeholder: 'Enter username' },
+//           { id: 'category', label: 'Category', type: 'select' },
+//           { id: 'phoneNumber', label: 'Phone Number', type: 'tel', pattern: '[0-9]{10}', placeholder: 'Enter 10-digit phone number' },
+//           { id: 'password', label: 'Password', type: 'password', minLength: 6, maxLength: 10, placeholder: '6-10 characters' },
+//           { id: 'buildingName', label: 'Building Name', type: 'text', placeholder: 'Enter building name' },
+//           { id: 'pincode', label: 'Pincode', type: 'select' },
+//           { id: 'areaName', label: 'Area', type: 'select' },
+//           { id: 'city', label: 'City', type: 'select' },
+//           { id: 'state', label: 'State', type: 'select' },
+//           { id: 'subscriptionId', label: 'Subscription Plan', type: 'select' },
+//         ].map(({ id, label, type, pattern, minLength, maxLength, placeholder }) => (
+//           <div key={id} className="relative group">
+//             <label htmlFor={id} className="block text-sm font-medium text-indigo-700 mb-1">
+//               {label} <span className="text-amber-500">*</span>
+//             </label>
+//             {id === 'category' ? (
+//               <select
+//                 id="category"
+//                 name="category"
+//                 value={formData.category}
+//                 onChange={handleChange}
+//                 required
+//                 className="mt-1 block w-full px-4 py-3 border border-indigo-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition duration-200 bg-white hover:bg-indigo-50"
+//               >
+//                 <option value="" disabled>Select a category</option>
+//                 {apiCategories
+//                   .filter((category) => category?.status === 1)
+//                   .map((item) => (
+//                     <option key={item._id} value={item._id}>
+//                       {item.category_name}
+//                     </option>
+//                   ))}
+//               </select>
+//             ) : id === 'password' ? (
+//               <div className="relative">
+//                 <input
+//                   id={id}
+//                   name={id}
+//                   type={showPassword ? 'text' : 'password'}
+//                   placeholder={placeholder}
+//                   required
+//                   value={formData[id as keyof TechnicianData]}
+//                   onChange={handleChange}
+//                   minLength={minLength}
+//                   maxLength={maxLength}
+//                   className="mt-1 block w-full px-4 py-3 border border-indigo-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition duration-200 bg-white hover:bg-indigo-50 pr-10"
+//                 />
+//                 <span
+//                   className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer text-indigo-500 hover:text-amber-500 transition"
+//                   onClick={() => setShowPassword((prev) => !prev)}
+//                 >
+//                   {showPassword ? <FaEyeSlash /> : <FaEye />}
+//                 </span>
+//               </div>
+//             ) : id === 'pincode' ? (
+//               <select
+//                 id="pincode"
+//                 name="pincode"
+//                 value={formData.pincode}
+//                 onChange={handleChange}
+//                 required
+//                 className="mt-1 block w-full px-4 py-3 border border-indigo-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition duration-200 bg-white hover:bg-indigo-50"
+//               >
+//                 <option value="" disabled>Select Pincode</option>
+//                 {pincodeData.map((p) => (
+//                   <option key={p._id} value={p.code}>
+//                     {p.code}
+//                   </option>
+//                 ))}
+//               </select>
+//             ) : id === 'areaName' ? (
+//               <select
+//                 id="areaName"
+//                 name="areaName"
+//                 value={formData.areaName}
+//                 onChange={handleChange}
+//                 required
+//                 disabled={!selectedPincode}
+//                 className="mt-1 block w-full px-4 py-3 border border-indigo-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition duration-200 bg-white hover:bg-indigo-50 disabled:bg-gray-100"
+//               >
+//                 <option value="" disabled>Select Area</option>
+//                 {areaOptions.map((a) => (
+//                   <option key={a._id} value={a.name}>
+//                     {a.name}
+//                   </option>
+//                 ))}
+//               </select>
+//             ) : id === 'city' ? (
+//               <select
+//                 id="city"
+//                 name="city"
+//                 value={formData.city}
+//                 onChange={handleChange}
+//                 required
+//                 disabled={!selectedPincode}
+//                 className="mt-1 block w-full px-4 py-3 border border-indigo-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition duration-200 bg-white hover:bg-indigo-50 disabled:bg-gray-100"
+//               >
+//                 <option value="" disabled>Select City</option>
+//                 {selectedPincode && pincodeData.find((p) => p.code === selectedPincode) && (
+//                   <option value={pincodeData.find((p) => p.code === selectedPincode)?.city}>
+//                     {pincodeData.find((p) => p.code === selectedPincode)?.city}
+//                   </option>
+//                 )}
+//               </select>
+//             ) : id === 'state' ? (
+//               <select
+//                 id="state"
+//                 name="state"
+//                 value={formData.state}
+//                 onChange={handleChange}
+//                 required
+//                 disabled={!selectedPincode}
+//                 className="mt-1 block w-full px-4 py-3 border border-indigo-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition duration-200 bg-white hover:bg-indigo-50 disabled:bg-gray-100"
+//               >
+//                 <option value="" disabled>Select State</option>
+//                 {selectedPincode && pincodeData.find((p) => p.code === selectedPincode) && (
+//                   <option value={pincodeData.find((p) => p.code === selectedPincode)?.state}>
+//                     {pincodeData.find((p) => p.code === selectedPincode)?.state}
+//                   </option>
+//                 )}
+//               </select>
+//             ) : id === 'subscriptionId' ? (
+//               <select
+//                 id="subscriptionId"
+//                 name="subscriptionId"
+//                 value={formData.subscriptionId}
+//                 onChange={handleChange}
+//                 required
+//                 className="mt-1 block w-full px-4 py-3 border border-indigo-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition duration-200 bg-white hover:bg-indigo-50"
+//               >
+//                 <option value="" disabled>Select Subscription Plan</option>
+//                 {subscriptionPlans
+//                 .filter(plan => plan.name !== "Free Plan") 
+//                 .map((plan) => (
+//                   <option key={plan._id} value={plan._id}>
+//                     {plan.name} - ₹{plan.finalPrice} ({plan.price} + {plan.gst})
+//                   </option>
+//                 ))}
+//               </select>
+//             ) : (
+//               <input
+//                 id={id}
+//                 name={id}
+//                 type={type}
+//                 placeholder={placeholder}
+//                 required
+//                 value={formData[id as keyof TechnicianData]}
+//                 onChange={handleChange}
+//                 pattern={pattern}
+//                 className="mt-1 block w-full px-4 py-3 border border-indigo-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition duration-200 bg-white hover:bg-indigo-50"
+//               />
+//             )}
+//           </div>
+//         ))}
+//       </div>
+//       <button
+//         type="submit"
+//         onClick={handleSubmit}
+//         disabled={loading}
+//         className="mt-8 w-full bg-gradient-to-r from-indigo-600 to-teal-500 text-white py-3 px-6 rounded-lg font-semibold hover:from-indigo-700 hover:to-teal-600 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 disabled:bg-gray-400 disabled:cursor-not-allowed transition duration-300 transform hover:scale-105"
+//       >
+//         {loading ? (
+//           <div className="flex items-center justify-center">
+//             <svg className="animate-spin h-5 w-5 mr-3 text-white" viewBox="0 0 24 24">
+//               <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+//               <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8h8a8 8 0 01-8 8 8 8 0 01-8-8z" />
+//             </svg>
+//             Adding Technician...
+//           </div>
+//         ) : (
+//           'Add Technician'
+//         )}
+//       </button>
+//     </div>
+//   );
+// };
+
+// export default AddTechnician;
+// import React, { useState, useCallback, useEffect } from 'react';
+// import { FaEye, FaEyeSlash } from 'react-icons/fa';
+// import { getAllCategories, getAllPincodes, registerTechByFranchise} from '../../api/apiMethods'; // Assuming addTechnician API method
+
+// interface TechnicianData {
+//   username: string;
+//   franchiseId: string;
+//   category: string;
+//   phoneNumber: string;
+//   password: string;
+//   buildingName: string;
+//   areaName: string;
+//   city: string;
+//   state: string;
+//   pincode: string;
+// }
+
+// interface PincodeData {
+//   _id: string;
+//   code: string;
+//   city: string;
+//   state: string;
+//   areas: { _id: string; name: string }[];
+// }
+
+// const initialFormState: TechnicianData = {
+//   username: '',
+//   franchiseId: '',
+//   category: '',
+//   phoneNumber: '',
+//   password: '',
+//   buildingName: '',
+//   areaName: '',
+//   city: '',
+//   state: '',
+//   pincode: '',
+// };
+
+// const AddTechnician: React.FC = () => {
+//   const [formData, setFormData] = useState<TechnicianData>(initialFormState);
+//   const [error, setError] = useState<string | null>(null);
+//   const [loading, setLoading] = useState(false);
+//   const [apiCategories, setApiCategories] = useState<{ _id: string; category_name: string; status :number }[]>([]);
+//   const [pincodeData, setPincodeData] = useState<PincodeData[]>([]);
+//   const [selectedPincode, setSelectedPincode] = useState<string>('');
+//   const [areaOptions, setAreaOptions] = useState<{ _id: string; name: string }[]>([]);
+//   const [showPassword, setShowPassword] = useState(false);
+  
+
+//   useEffect(() => {
+//     getAllPincodes()
+//       .then((res: any) => {
+//         if (Array.isArray(res?.data)) {
+//           setPincodeData(res.data);
+//         }
+//       })
+//       .catch(() => {});
+//   }, []);
+
+//   useEffect(() => {
+//     if (selectedPincode) {
+//       const found = pincodeData.find((p) => p.code === selectedPincode);
+//       if (found && found.areas) {
+//         setAreaOptions(found.areas);
+//         setFormData((prev) => ({
+//           ...prev,
+//           city: found.city,
+//           state: found.state,
+//         }));
+//       } else {
+//         setAreaOptions([]);
+//         setFormData((prev) => ({
+//           ...prev,
+//           city: '',
+//           state: '',
+//           areaName: '',
+//         }));
+//       }
+//     } else {
+//       setAreaOptions([]);
+//       setFormData((prev) => ({
+//         ...prev,
+//         city: '',
+//         state: '',
+//         areaName: '',
+//       }));
+//     }
+//   }, [selectedPincode, pincodeData]);
+
+//   useEffect(()=>{
+//     getAllCategories(null)
+//         .then((res: any) => {
+//           if (Array.isArray(res?.data)) {
+//             setApiCategories(res.data);
+//           } else {
+//             setApiCategories([]);
+//             setCatError('Failed to load categories');
+//           }
+//         })
+//         .catch(() => {
+//           setApiCategories([]);
+//           setCatError('Failed to load categories');
+//         })
+//   },[])
+
+//   const handleChange = useCallback(
+//     (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+//       const { name, value } = e.target;
+//       setFormData((prev) => ({ ...prev, [name]: value }));
+//       if (name === 'pincode') {
+//         setSelectedPincode(value);
+//       }
+//     },
+//     []
+//   );
+
+//   const handleSubmit = useCallback(
+//     async (e: React.FormEvent) => {
+//       e.preventDefault();
+//       setError(null);
+//       setLoading(true);
+
+//       try {
+//         const franchiseId = localStorage.getItem('userId')
+//         if (!formData.pincode || formData.pincode.length !== 6) {
+//           setError('Pincode must be exactly 6 digits');
+//           setLoading(false);
+//           return;
+//         }
+
+//         if (!/^\d{10}$/.test(formData.phoneNumber)) {
+//           setError('Phone number must be exactly 10 digits');
+//           setLoading(false);
+//           return;
+//         }
+
+//         const payload = {
+//           username: formData.username,
+//           franchiseId: franchiseId,
+//           category: formData.category,
+//           phoneNumber: formData.phoneNumber,
+//           password: formData.password,
+//           buildingName: formData.buildingName,
+//           areaName: formData.areaName,
+//           city: formData.city,
+//           state: formData.state,
+//           pincode: formData.pincode,
+//         };
+
+//         const response = await registerTechByFranchise(payload);
+
+//         if (response?.success) {
+//           setFormData(initialFormState); // Reset form on success
+//           alert('Technician added successfully!');
+//         } else {
+//           throw new Error('Failed to add technician');
+//         }
+//       } catch (err: any) {
+//         setError(err?.data?.error?.[0] || err?.message || 'Failed to add technician. Please try again.');
+//       } finally {
+//         setLoading(false);
+//       }
+//     },
+//     [formData]
+//   );
+
+//   return (
+//     <div className="max-w-3xl mx-auto p-6 bg-white rounded-lg shadow-xl">
+//       <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">Add New Technician</h2>
+//       {error && (
+//         <div className="text-red-600 text-sm text-center bg-red-50 p-2 rounded mb-4">{error}</div>
+//       )}
+//       <div className="space-y-4">
+//         {[
+//           { id: 'username', label: 'Username', type: 'text' },
+//           { id: 'category', label: 'Category', type: 'text' },
+//           { id: 'phoneNumber', label: 'Phone Number', type: 'tel', pattern: '[0-9]{10}' },
+//           { id: 'password', label: 'Password', type: 'password', minLength: 6, maxLength: 10 },
+//           { id: 'buildingName', label: 'Building Name', type: 'text' },
+//           { id: 'pincode', label: 'Pincode', type: 'select' },
+//           { id: 'areaName', label: 'Area', type: 'select' },
+//           { id: 'city', label: 'City', type: 'select' },
+//           { id: 'state', label: 'State', type: 'select' },
+//         ].map(({ id, label, type, pattern, minLength, maxLength }) => (
+//           <div key={id}>
+//             <label htmlFor={id} className="block text-sm font-medium text-gray-700">
+//               {label} <span className="text-red-600">*</span>
+//             </label>
+//             {id === 'category' ? (
+//                 <div>
+//               <label htmlFor="category" className="block text-sm font-medium text-gray-700">
+//               </label>
+//               <select
+//                 id="category"
+//                 name="category"
+//                 value={formData.category}
+//                 onChange={handleChange}
+//                 required
+//                 className="mt-1 w-full border border-gray-300 rounded-md p-2"
+//               >
+//                 <option value="" disabled>
+//                    Select a category
+//                 </option>
+        
+//                  {apiCategories
+//                       .filter((category) => category?.status === 1)
+//                       .map((item) => (
+//                         <option key={item._id} value={item._id}>
+//                           {item.category_name}
+//                         </option>
+//                       ))}
+//               </select>
+//             </div>
+//             ) :id === 'password' ? (
+//               <div className="relative">
+//                 <input
+//                   id={id}
+//                   name={id}
+//                   type={showPassword ? 'text' : 'password'}
+//                   placeholder="Password (6-10 characters)"
+//                   required
+//                   value={formData[id as keyof TechnicianData]}
+//                   onChange={handleChange}
+//                   minLength={minLength}
+//                   maxLength={maxLength}
+//                   className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+//                 />
+//                 <span
+//                   className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer text-gray-500"
+//                   onClick={() => setShowPassword((prev) => !prev)}
+//                 >
+//                   {showPassword ? <FaEyeSlash /> : <FaEye />}
+//                 </span>
+//               </div>
+//             ) : id === 'pincode' ? (
+//               <select
+//                 id="pincode"
+//                 name="pincode"
+//                 value={formData.pincode}
+//                 onChange={handleChange}
+//                 required
+//                 className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+//               >
+//                 <option value="">Select Pincode</option>
+//                 {pincodeData.map((p) => (
+//                   <option key={p._id} value={p.code}>
+//                     {p.code}
+//                   </option>
+//                 ))}
+//               </select>
+//             ) : id === 'areaName' ? (
+//               <select
+//                 id="areaName"
+//                 name="areaName"
+//                 value={formData.areaName}
+//                 onChange={handleChange}
+//                 required
+//                 disabled={!selectedPincode}
+//                 className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 disabled:bg-gray-100"
+//               >
+//                 <option value="">Select Area</option>
+//                 {areaOptions.map((a) => (
+//                   <option key={a._id} value={a.name}>
+//                     {a.name}
+//                   </option>
+//                 ))}
+//               </select>
+//             ) : id === 'city' ? (
+//               <select
+//                 id="city"
+//                 name="city"
+//                 value={formData.city}
+//                 onChange={handleChange}
+//                 required
+//                 disabled={!selectedPincode}
+//                 className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 disabled:bg-gray-100"
+//               >
+//                 <option value="">Select City</option>
+//                 {selectedPincode && pincodeData.find((p) => p.code === selectedPincode) && (
+//                   <option value={pincodeData.find((p) => p.code === selectedPincode)?.city}>
+//                     {pincodeData.find((p) => p.code === selectedPincode)?.city}
+//                   </option>
+//                 )}
+//               </select>
+//             ) : id === 'state' ? (
+//               <select
+//                 id="state"
+//                 name="state"
+//                 value={formData.state}
+//                 onChange={handleChange}
+//                 required
+//                 disabled={!selectedPincode}
+//                 className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 disabled:bg-gray-100"
+//               >
+//                 <option value="">Select State</option>
+//                 {selectedPincode && pincodeData.find((p) => p.code === selectedPincode) && (
+//                   <option value={pincodeData.find((p) => p.code === selectedPincode)?.state}>
+//                     {pincodeData.find((p) => p.code === selectedPincode)?.state}
+//                   </option>
+//                 )}
+//               </select>
+//             ) : (
+//               <input
+//                 id={id}
+//                 name={id}
+//                 type={type}
+//                 placeholder={label}
+//                 required
+//                 value={formData[id as keyof TechnicianData]}
+//                 onChange={handleChange}
+//                 pattern={pattern}
+//                 className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+//               />
+//             )}
+//           </div>
+//         ))}
+//         <button
+//           type="submit"
+//           onClick={handleSubmit}
+//           disabled={loading}
+//           className="w-full bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:bg-gray-400 disabled:cursor-not-allowed"
+//         >
+//           {loading ? 'Adding Technician...' : 'Add Technician'}
+//         </button>
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default AddTechnician;

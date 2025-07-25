@@ -21,7 +21,7 @@ const menuItems = [
   { name: 'Profile', href: '/profile', icon: User },
   { name: 'Technicians', href: '/technicians', icon: Users },
   { name: 'Earnings', href: '/earnings', icon: DollarSign },
-  { name: 'Refer Technician', href: '/refer', icon: UserPlus },
+  // { name: 'Refer Technician', href: '/refer', icon: UserPlus },
 ];
 
 const FranchiseSidebar: React.FC<FranchiseSidebarProps> = ({
