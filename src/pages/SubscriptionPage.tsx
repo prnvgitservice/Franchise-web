@@ -45,14 +45,9 @@ const SubscriptionPage: React.FC = () => {
   }, []);
 
   const handleFullDetails = (plan: Plan): void => {
-    // Calculate original GST for display
     const originalGst = plan.originalPrice ? Math.round(plan.originalPrice * 0.18) : 0;
-    
     navigate(`/subscription/${plan._id}`, { 
-      state: { 
-        plan,
-        originalGst
-      } 
+      state: { plan, originalGst } 
     });
   };
 
@@ -98,87 +93,89 @@ const SubscriptionPage: React.FC = () => {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-          {plans.map((plan: Plan) => {
-            const config = PLAN_CONFIG[plan.name] || {
-              gradient: "from-gray-400 to-gray-600",
-              icon: Star,
-              button: "bg-gray-500 hover:bg-gray-600",
-            };
-            const IconComponent = config?.icon;
+          {plans
+            .filter(plan => plan.name !== "Free Plan") 
+            .map((plan: Plan) => {
+              const config = PLAN_CONFIG[plan.name] || {
+                gradient: "from-gray-400 to-gray-600",
+                icon: Star,
+                button: "bg-gray-500 hover:bg-gray-600",
+              };
+              const IconComponent = config?.icon;
 
-            return (
-              <div
-                key={plan._id}
-                className={`relative flex flex-col h-full bg-white rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 transform hover:scale-105 border 
-                  ${selectedPlan === plan._id ? 'ring-2 ring-blue-500' : ''} 
-                  ${plan.isPopular ? 'border-yellow-400 ring-2 ring-yellow-400' : 'border-gray-200'}`}
-              >
-                {plan.isPopular && (
-                  <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                    <div className="bg-gradient-to-r from-yellow-400 to-yellow-500 text-white px-6 py-2 rounded-full text-sm font-bold shadow-lg">
-                      MOST POPULAR
-                    </div>
-                  </div>
-                )}
-
-                {Number(plan.discount) > 0 && (
-                  <div className="absolute -top-2 -right-2 z-10">
-                    <div className="bg-red-600 text-white px-3 py-1 rounded-full text-xs font-bold shadow-md">
-                      {plan?.discount}% OFF
-                    </div>
-                  </div>
-                )}
-
-                <div className="p-6 pb-6 flex flex-col h-full">
-                  <div className="text-center mb-6">
-                    <div className={`w-16 h-16 rounded-full bg-gradient-to-r ${config?.gradient} flex items-center justify-center mx-auto mb-4 shadow-md`}>
-                      <IconComponent className="text-white" size={28} />
-                    </div>
-                    <h3 className="text-xl font-bold text-gray-800">{plan?.name}</h3>
-
-                    <div className="mt-2">
-                      <div className="text-2xl font-extrabold text-gray-900">₹ {plan?.price}</div>
-                      {Number(plan.originalPrice) > 0 && (
-                        <div className="text-sm text-gray-500 line-through">
-                          ₹{plan.originalPrice} + (GST 18%)
-                        </div>
-                      )}
-                      {Number(plan.price) > 0 && (
-                      <div className="text-sm text-gray-600">
-                        ₹{plan.price} +  ₹{plan.gst} (GST 18%)
+              return (
+                <div
+                  key={plan._id}
+                  className={`relative flex flex-col h-full bg-white rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 transform hover:scale-105 border 
+                    ${selectedPlan === plan._id ? 'ring-2 ring-blue-500' : ''} 
+                    ${plan.isPopular ? 'border-yellow-400 ring-2 ring-yellow-400' : 'border-gray-200'}`}
+                >
+                  {plan.isPopular && (
+                    <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
+                      <div className="bg-gradient-to-r from-yellow-400 to-yellow-500 text-white px-6 py-2 rounded-full text-sm font-bold shadow-lg">
+                        MOST POPULAR
                       </div>
-                      )}
                     </div>
+                  )}
 
-                    <div className="mt-3 text-sm font-medium text-blue-700 bg-blue-100 px-3 py-1 rounded-full inline-block">
-                      Valid until {plan?.validity === null ? (plan.leads) : (plan.validity)} {plan?.validity === null ? "leads" : "days"}
+                  {Number(plan.discount) > 0 && (
+                    <div className="absolute -top-2 -right-2 z-10">
+                      <div className="bg-red-600 text-white px-3 py-1 rounded-full text-xs font-bold shadow-md">
+                        {plan?.discount}% OFF
+                      </div>
                     </div>
-                  </div>
+                  )}
 
-                  <ul className="space-y-2 mb-3">
-                    {plan.features.map((feature, index) => (
-                      <li key={index} className="flex items-center gap-3 text-sm text-gray-700">
-                        {feature.included ? (
-                          <Check size={16} className="text-green-500" />
-                        ) : (
-                          <X size={16} className="text-red-400" />
+                  <div className="p-6 pb-6 flex flex-col h-full">
+                    <div className="text-center mb-6">
+                      <div className={`w-16 h-16 rounded-full bg-gradient-to-r ${config?.gradient} flex items-center justify-center mx-auto mb-4 shadow-md`}>
+                        <IconComponent className="text-white" size={28} />
+                      </div>
+                      <h3 className="text-xl font-bold text-gray-800">{plan?.name}</h3>
+
+                      <div className="mt-2">
+                        <div className="text-2xl font-extrabold text-gray-900">₹ {plan?.price}</div>
+                        {Number(plan.originalPrice) > 0 && (
+                          <div className="text-sm text-gray-500 line-through">
+                            ₹{plan.originalPrice} + (GST 18%)
+                          </div>
                         )}
-                        {feature.name}
-                      </li>
-                    ))}
-                  </ul>
+                        {Number(plan.price) > 0 && (
+                        <div className="text-sm text-gray-600">
+                          ₹{plan.price} + ₹{plan.gst} (GST 18%)
+                        </div>
+                        )}
+                      </div>
 
-                  <div className="mt-auto">
-                    <button
-                      onClick={() => handleFullDetails(plan)}
-                      className="w-full py-2 px-4 text-gray-600 hover:text-blue-600 font-medium transition duration-300 text-green-600"
-                    >
-                      View Full Details →
-                    </button>
+                      <div className="mt-3 text-sm font-medium text-blue-700 bg-blue-100 px-3 py-1 rounded-full inline-block">
+                        Valid until {plan?.validity === null ? plan.leads : plan.validity} {plan?.validity === null ? "leads" : "days"}
+                      </div>
+                    </div>
+
+                    <ul className="space-y-2 mb-3">
+                      {plan.features.map((feature, index) => (
+                        <li key={index} className="flex items-center gap-3 text-sm text-gray-700">
+                          {feature.included ? (
+                            <Check size={16} className="text-green-500" />
+                          ) : (
+                            <X size={16} className="text-red-400" />
+                          )}
+                          {feature.name}
+                        </li>
+                      ))}
+                    </ul>
+
+                    <div className="mt-auto">
+                      <button
+                        onClick={() => handleFullDetails(plan)}
+                        className="w-full py-2 px-4 text-gray-600 hover:text-blue-600 font-medium transition duration-300 text-green-600"
+                      >
+                        View Full Details →
+                      </button>
+                    </div>
                   </div>
                 </div>
-              </div>
-            );
+              );
           })}
         </div>
       </div>
