@@ -14,6 +14,7 @@ import CategoriesPage from '../pages/CategoriesPage';
 import AboutUs from '../pages/AboutPage';
 import SubscriptionPage from '../pages/SubscriptionPage';
 import KeyFeaturesPage from '../pages/KeyFeaturesPage';
+import PlanDetailsPage from '../pages/PlanDetailsPage';
 
 const AppRoutes = () => {
     return (
@@ -32,6 +33,7 @@ const AppRoutes = () => {
                 <Route path="/categories" element={<CategoriesPage />} />
                 <Route path="/about" element={<AboutUs />} />
                 <Route path="/subscription" element={<SubscriptionPage />} />
+                <Route path="/subscription/:subscriptionId" element={<PlanDetailsPage/>} />
                 <Route path="/key-features" element={<KeyFeaturesPage />} />
             </Route>
 
