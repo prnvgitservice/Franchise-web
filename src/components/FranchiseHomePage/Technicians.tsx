@@ -1,11 +1,35 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Users, Search, Plus, Star, MapPin, Phone, Mail, Filter, SquarePen, Eye, Trash } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { getAllTechniciansByFranchise } from '../../api/apiMethods';
 
 const Technicians: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [filterStatus, setFilterStatus] = useState('all');
-  const navigate = useNavigate();
+  const [allTechs, setAllTechs] = useState([]);
+  const [error, setError] = useState('');
+
+  const fetchTechsByFranchise = async () => {
+    try {
+      const franchiseId = localStorage.getItem('userId') || '';
+      const response = await getAllTechniciansByFranchise(franchiseId);
+      if (response?.result) {
+        setAllTechs(response.result);
+        console.log('Technicians fetched successfully:', response);
+      } else {
+        setAllTechs([]);
+        console.error('No technicians found');
+      }
+    } catch (error) {
+      setError(error?.message || 'Failed to fetch technicians');
+      console.error('Error fetching technicians:', error);
+
+    }
+  };
+  useEffect(() => {
+    fetchTechsByFranchise();
+  }, []);
+
 
   const technicians = [
     {
@@ -20,62 +44,14 @@ const Technicians: React.FC = () => {
       joinDate: '2024-01-15',
       experience: '8 years'
     },
-    {
-      id: 2,
-      name: 'Priya Sharma',
-      email: 'priya.sharma@proservices.com',
-      phone: '+91 98765 43212',
-      specialty: 'Plumbing Expert',
-      rating: 4.7,
-      location: 'Delhi, NCR',
-      services: 89,
-      joinDate: '2024-02-20',
-      experience: '5 years'
-    },
-    {
-      id: 3,
-      name: 'Amit Patel',
-      email: 'amit.patel@proservices.com',
-      phone: '+91 98765 43213',
-      specialty: 'Electrical Services',
-      rating: 4.8,
-      location: 'Ahmedabad, Gujarat',
-      status: 'Available',
-      services: 234,
-      joinDate: '2023-11-10',
-      experience: '10 years'
-    },
-    {
-      id: 4,
-      name: 'Sneha Reddy',
-      email: 'sneha.reddy@proservices.com',
-      phone: '+91 98765 43214',
-      specialty: 'Appliance Repair',
-      rating: 4.6,
-      location: 'Hyderabad, Telangana',
-      services: 67,
-      joinDate: '2024-03-05',
-      experience: '3 years'
-    },
-    {
-      id: 5,
-      name: 'Vikram Singh',
-      email: 'vikram.singh@proservices.com',
-      phone: '+91 98765 43215',
-      specialty: 'HVAC & Plumbing',
-      rating: 4.9,
-      location: 'Jaipur, Rajasthan',
-      services: 198,
-      joinDate: '2023-09-12',
-      experience: '12 years'
-    }
+
   ];
 
-  const filteredTechnicians = technicians.filter(tech => {
-    const matchesSearch = tech.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         tech.specialty.toLowerCase().includes(searchTerm.toLowerCase()) 
-    const matchesFilter = filterStatus === 'all' || tech.status.toLowerCase() === filterStatus.toLowerCase();
-    return matchesSearch && matchesFilter;
+  const filteredTechnicians = allTechs.filter(tech => {
+    const matchesSearch = tech.username?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      tech.specialty?.toLowerCase().includes(searchTerm.toLowerCase())
+    // const matchesFilter = filterStatus === 'all' || tech.status.toLowerCase() === filterStatus.toLowerCase();
+    return matchesSearch;
   });
 
   const getStatusColor = (status: string) => {
@@ -158,9 +134,9 @@ const Technicians: React.FC = () => {
                 <tr key={tech.id} className="border-b border-gray-100 hover:bg-gray-50 transition-colors duration-200">
                   <td className="py-4 px-6">
                     <div className="flex items-center space-x-3">
-                      <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
+                      <div className="w-10 h-10 bg-gradient-to-r from-blue-400 to-purple-400 rounded-full flex items-center justify-center">
                         <span className="text-white font-medium text-sm">
-                          {tech.name.split(' ').map(n => n[0]).join('')}
+                          {tech.name?.split(' ').map(n => n[0]).join('')}
                         </span>
                       </div>
                       <div>
@@ -177,7 +153,7 @@ const Technicians: React.FC = () => {
                       </div> */}
                       <div className="flex items-center text-sm text-gray-700 whitespace-nowrap">
                         {/* <Phone className="h-3 w-3 mr-2 text-gray-400 " /> */}
-                        {tech.phone}
+                        {tech.phoneNumber}
                       </div>
                     </div>
                   </td>
@@ -210,10 +186,10 @@ const Technicians: React.FC = () => {
                   <td className="py-4 px-6">
                     <div className="flex space-x-2">
                       <button className="text-blue-600 hover:text-blue-700 text-sm font-medium transition-colors duration-200">
-                         <Eye size={18}/>
+                        <Eye size={18} />
                       </button>
                       <button className="text-green-600 hover:text-green-700 text-sm font-medium transition-colors duration-200">
-                        <SquarePen size={16}/>
+                        <SquarePen size={16} />
                       </button>
                       {/* <button className="text-red-600 hover:text-red-700 text-sm font-medium transition-colors duration-200">
                         <Trash />
@@ -225,12 +201,11 @@ const Technicians: React.FC = () => {
             </tbody>
           </table>
         </div>
-        
+
         {filteredTechnicians.length === 0 && (
           <div className="text-center py-12">
             <Users className="h-12 w-12 text-gray-400 mx-auto mb-4" />
             <h3 className="text-lg font-medium text-gray-900 mb-2">No technicians found</h3>
-            <p className="text-gray-500">Try adjusting your search or filter criteria.</p>
           </div>
         )}
       </div>

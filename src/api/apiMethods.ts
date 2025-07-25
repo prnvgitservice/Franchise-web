@@ -20,3 +20,6 @@ export const getPlans = (data: any) => apiRequest("getPlans", data);
 export const registerTechByFranchise = (data: any) => apiRequest('registerTechByFranchise', data)
 
 export const addTechSubscriptionPlan = (data: any) => apiRequest("addTechSubscriptionPlan", data);
+export const getAllTechniciansByFranchise = (franchiseId: string) =>
+  apiRequest("getAllTechniciansByFranchise", null, franchiseId);
+

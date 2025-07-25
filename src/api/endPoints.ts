@@ -53,6 +53,10 @@ const endpoints: any = {
    addTechSubscriptionPlan: {
     method: "post",
     url: () => `/api/technicianSubscription/addTechSubscriptionPlan`
-  }
+  },
+   getAllTechniciansByFranchise: {
+    method: "get",
+    url: (franchiseId: string) => `/api/techAuth/getTechProfilesByFranchiseId/${franchiseId}`
+  },
 }
 export default endpoints;
