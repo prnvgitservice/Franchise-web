@@ -49,6 +49,10 @@ const endpoints: any = {
   registerTechByFranchise:{
     method:'post',
     url: () => `/api/techAuth/registerByFranchise`
-  }
+  },
+   getAllTechniciansByFranchise: {
+    method: "get",
+    url: (franchiseId: string) => `/api/techAuth/getTechProfilesByFranchiseId/${franchiseId}`
+  },
 }
 export default endpoints;

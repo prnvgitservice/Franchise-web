@@ -19,3 +19,6 @@ export const getPlans = (data: any) => apiRequest("getPlans", data);
 
 export const registerTechByFranchise = (data: any) => apiRequest('registerTechByFranchise', data)
 
+export const getAllTechniciansByFranchise = (franchiseId: string) =>
+  apiRequest("getAllTechniciansByFranchise", null, franchiseId);
+
