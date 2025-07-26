@@ -1,9 +1,10 @@
 import React from 'react';
-import { Calendar, Users, CheckCircle, DollarSign, Star, Clock, User, Monitor, CreditCard } from 'lucide-react';
+import { Calendar, Users, CheckCircle, DollarSign, Star, Clock, User, Monitor, CreditCard, Wrench } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from 'recharts';
 
 const Dashboard: React.FC = () => {
-const navigate = useNavigate()
+  const navigate = useNavigate()
 
   const today = new Date();
   const dateString = today.toLocaleDateString('en-US', {
@@ -42,7 +43,6 @@ const navigate = useNavigate()
       color: 'bg-yellow-100 text-yellow-600',
       iconBg: 'bg-yellow-100'
     },
-    // { title: 'Total Referrals', value: '12', icon: Users, color: 'bg-blue-100 text-blue-600', iconBg: 'bg-yellow-100' }
   ];
 
   const monthlyEarnings = [
@@ -87,6 +87,13 @@ const navigate = useNavigate()
       status: 'active',
       icon: CreditCard
     }
+  ];
+
+  // Subscription plans data for pie chart with correct colors
+  const subscriptionData = [
+    { name: 'Economy Plan', value: 45, color: '#10B981' }, // Green for Economy
+    { name: 'Gold Plan', value: 30, color: '#F59E0B' },   // Amber for Gold
+    { name: 'Platinum Plan', value: 25, color: '#3B82F6' } // Blue for Platinum
   ];
 
   return (
@@ -206,6 +213,76 @@ const navigate = useNavigate()
                 </div>
               );
             })}
+          </div>
+        </div>
+      </div>
+
+      {/* Subscription Plans Distribution */}
+      <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+        <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center">
+            <div className="p-2 bg-purple-100 rounded-lg mr-3">
+              <CreditCard className="h-5 w-5 text-purple-600" />
+            </div>
+            <h3 className="text-lg font-semibold text-gray-900">Subscription Plans</h3>
+          </div>
+          <button className="text-blue-600 text-sm font-medium hover:text-blue-700 transition-colors duration-200 cursor-pointer"
+            onClick={() => navigate('/subscriptions')}>
+            View Details
+          </button>
+        </div>
+        
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div className="h-[300px]">
+            <ResponsiveContainer width="100%" height="100%">
+              <PieChart>
+                <Pie
+                  data={subscriptionData}
+                  cx="50%"
+                  cy="50%"
+                  innerRadius={60}
+                  outerRadius={100}
+                  paddingAngle={5}
+                  dataKey="value"
+                  label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
+                >
+                  {subscriptionData.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={entry.color} />
+                  ))}
+                </Pie>
+                <Tooltip 
+                  formatter={(value) => [`${value}%`, 'Share']}
+                  contentStyle={{ 
+                    backgroundColor: 'rgba(255, 255, 255, 0.95)', 
+                    border: 'none', 
+                    borderRadius: '12px',
+                    boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)'
+                  }} 
+                />
+                <Legend />
+              </PieChart>
+            </ResponsiveContainer>
+          </div>
+          
+          <div className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {subscriptionData.map((item, index) => (
+                <div 
+                  key={index} 
+                  className="flex flex-col p-4 rounded-lg border border-gray-200 hover:shadow-md transition-all duration-200"
+                  style={{ backgroundColor: `${item.color}10` }}
+                >
+                  <div className="flex items-center mb-2">
+                    <div className="w-3 h-3 rounded-full mr-3" style={{ backgroundColor: item.color }}></div>
+                    <h4 className="text-md font-semibold text-gray-900">{item.name}</h4>
+                  </div>
+                  <div className="flex items-end justify-between mt-2">
+                    <p className="text-2xl font-bold" style={{ color: item.color }}>{item.value}%</p>
+                    <div className="text-sm text-gray-500">of total</div>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </div>
