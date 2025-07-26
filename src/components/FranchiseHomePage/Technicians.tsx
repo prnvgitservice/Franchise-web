@@ -231,14 +231,14 @@ const Technicians: React.FC = () => {
                     <td className="py-4 px-6">
                       <div className="flex space-x-2">
                         <button
-                          className="text-blue-600 hover:text-blue-700 text-sm font-medium transition-colors duration-200"
+                          className="text-blue-600 hover:text-blue-700 text-sm font-medium transition-colors duration-200 cursor-pointer"
                           aria-label="View technician details"
                           onClick={() => navigate(`/technician/${tech.id}`, { state: { technician: tech } })}
                         >
                           <Eye size={18} />
                         </button>
                         <button
-                          className="text-green-600 hover:text-green-700 text-sm font-medium transition-colors duration-200"
+                          className="text-green-600 hover:text-green-700 text-sm font-medium transition-colors duration-200 cursor-pointer"
                           aria-label="Edit technician"
                           onClick={() => navigate(`/editTechnician/${tech.id}`, { state: { technician: tech } })}
                         >
