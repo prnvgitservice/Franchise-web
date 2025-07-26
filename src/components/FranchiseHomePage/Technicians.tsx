@@ -239,7 +239,7 @@ const Technicians: React.FC = () => {
                         <button
                           className="text-green-600 hover:text-green-700 text-sm font-medium transition-colors duration-200"
                           aria-label="Edit technician"
-                          onClick={() => navigate(`/editTechnician/${tech.id}`)}
+                          onClick={() => navigate(`/editTechnician/${tech.id}`, { state: { technician: tech } })}
                         >
                           <SquarePen size={16} />
                         </button>

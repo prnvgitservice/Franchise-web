@@ -58,9 +58,9 @@ const endpoints: any = {
     method: "get",
     url: (franchiseId: string) => `/api/techAuth/getTechProfilesByFranchiseId/${franchiseId}`
   },
-  editAllTechnicianByFranchise: {
+  updateTechByFranchise: {
     method: "put",
-    url: () => `/api/techAuth/updateTechByFranchise`
+    url: () => `/api/techAuth/updateTechByFranchaise`
   },
 }
 export default endpoints;
