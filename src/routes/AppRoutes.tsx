@@ -19,6 +19,7 @@ import AddTechnician from '../components/FranchiseHomePage/AddTechnician';
 import BuySubscription from '../components/FranchiseHomePage/BuySubscription';
 import TechnicianView from '../components/FranchiseHomePage/TechinicianView';
 import FranchiseSubscription from '../components/FranchiseHomePage/FranchiseSubscription';
+import EditTechnician from '../components/FranchiseHomePage/EditTechnician';
 
 const AppRoutes = () => {
     return (
@@ -33,9 +34,10 @@ const AppRoutes = () => {
                 <Route path="/profile" element={<Profile />} />
                 <Route path="/technicians" element={<Technicians />} />
                 <Route path="/addTechnician" element={<AddTechnician />} />
+                <Route path="/technician/:id" element={<TechnicianView />} />
+                <Route path='/editTechnician/:id' element={<EditTechnician />} />
                 <Route path="/earnings" element={<Earnings />} />
                 <Route path="/buyPlan" element={<BuySubscription />} />
-                <Route path="/technician/:id" element={<TechnicianView />} />
                 <Route path='/franchiseSubscription' element={<FranchiseSubscription />}/>
                 
                 {/* <Route path="/refer" element={<Refer />} /> */}
