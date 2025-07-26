@@ -1,10 +1,40 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Calendar, Users, CheckCircle, DollarSign, Star, Clock, User, Monitor, CreditCard, Wrench } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from 'recharts';
+import { getAllTechniciansByFranchise } from '../../api/apiMethods';
+
+interface Subscription {
+  subscriptionId: string;
+  subscriptionName: string;
+  startDate: string;
+  endDate: string;
+  leads: number | null;
+  ordersCount: number;
+  _id: string;
+}
+
+interface Technician {
+  id: string;
+  franchiseId: string;
+  username: string;
+  userId: string;
+  phoneNumber: string;
+  role: string;
+  category: string;
+  buildingName: string;
+  areaName: string;
+  city: string;
+  state: string;
+  pincode: string;
+  subscription: Subscription;
+}
 
 const Dashboard: React.FC = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+  const [technicians, setTechnicians] = useState<Technician[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
 
   const today = new Date();
   const dateString = today.toLocaleDateString('en-US', {
@@ -14,17 +44,70 @@ const Dashboard: React.FC = () => {
     year: 'numeric'
   });
 
+  // Fetch technicians data
+  const fetchTechsByFranchise = async () => {
+    try {
+      setLoading(true);
+      setError('');
+      const franchiseId = localStorage.getItem('userId') || '';
+      const response = await getAllTechniciansByFranchise(franchiseId);
+      if (Array.isArray(response?.result)) {
+        setTechnicians(response.result);
+      } else {
+        setTechnicians([]);
+        setError('No technicians found');
+      }
+    } catch (error: any) {
+      setError(error?.message || 'Failed to fetch technicians');
+      setTechnicians([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchTechsByFranchise();
+  }, []);
+
+  // Calculate stats
+  const totalTechnicians = technicians.length;
+  const totalSubscriptions = technicians.length;
+
+  // Calculate subscription distribution for pie chart
+  const planCounts: Record<string, number> = {};
+  technicians.forEach(tech => {
+    const planName = tech.subscription?.subscriptionName || 'No Plan';
+    planCounts[planName] = (planCounts[planName] || 0) + 1;
+  });
+
+  const subscriptionData = Object.entries(planCounts).map(([name, value]) => ({
+    name,
+    value,
+    color: getColorForPlan(name)
+  }));
+
+  function getColorForPlan(planName: string): string {
+    const colorMap: Record<string, string> = {
+      'Economy Plan': '#10B981',
+      'Gold Plan': '#F59E0B',
+      'Platinum Plan': '#3B82F6',
+      'Basic Plan': '#8B5CF6',
+      'Premium Plan': '#EC4899'
+    };
+    return colorMap[planName] || '#6B7280';
+  }
+
   const stats = [
     {
       title: 'Total Technicians',
-      value: '2',
+      value: totalTechnicians,
       icon: Users,
       color: 'bg-blue-100 text-blue-600',
       iconBg: 'bg-blue-100'
     },
     {
       title: 'Total Subscriptions',
-      value: '3',
+      value: totalSubscriptions,
       icon: CreditCard,
       color: 'bg-green-100 text-green-600',
       iconBg: 'bg-green-100'
@@ -36,13 +119,16 @@ const Dashboard: React.FC = () => {
       color: 'bg-yellow-100 text-yellow-600',
       iconBg: 'bg-yellow-100'
     },
-    {
+
+      {
       title: 'Monthly Earnings',
       value: '₹45,00',
       icon: DollarSign,
       color: 'bg-yellow-100 text-yellow-600',
       iconBg: 'bg-yellow-100'
     },
+
+    
   ];
 
   const monthlyEarnings = [
@@ -89,16 +175,8 @@ const Dashboard: React.FC = () => {
     }
   ];
 
-  // Subscription plans data for pie chart with correct colors
-  const subscriptionData = [
-    { name: 'Economy Plan', value: 45, color: '#10B981' }, // Green for Economy
-    { name: 'Gold Plan', value: 30, color: '#F59E0B' },   // Amber for Gold
-    { name: 'Platinum Plan', value: 25, color: '#3B82F6' } // Blue for Platinum
-  ];
-
   return (
     <div className="space-y-6 max-w-7xl mx-auto scrollbar-hide">
-      {/* Welcome Section */}
       <div className="bg-gradient-to-r from-blue-500 via-purple-500 to-purple-600 rounded-2xl p-6 text-white relative overflow-hidden">
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between">
           <div className="mb-4 lg:mb-0">
@@ -109,19 +187,15 @@ const Dashboard: React.FC = () => {
               Here's your performance overview for today
             </p>
           </div>
-
           <div className="bg-white/20 backdrop-blur-sm rounded-xl p-4 border border-white/30">
             <p className="text-sm text-blue-100 mb-1">Today's Date</p>
             <p className="text-lg font-semibold">{dateString}</p>
           </div>
         </div>
-
-        {/* Decorative elements */}
         <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -translate-y-16 translate-x-16"></div>
         <div className="absolute bottom-0 left-0 w-24 h-24 bg-white/10 rounded-full translate-y-12 -translate-x-12"></div>
       </div>
 
-      {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {stats.map((stat, index) => {
           const Icon = stat.icon;
@@ -144,9 +218,7 @@ const Dashboard: React.FC = () => {
         })}
       </div>
 
-      {/* Monthly Earnings Graph & Recent Activities */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Monthly Earnings Graph */}
         <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center">
@@ -175,7 +247,6 @@ const Dashboard: React.FC = () => {
           </div>
         </div>
 
-        {/* Recent Activities */}
         <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center">
@@ -185,7 +256,7 @@ const Dashboard: React.FC = () => {
               <h3 className="text-lg font-semibold text-gray-900">Recent Earnings</h3>
             </div>
             <button className="text-blue-600 text-sm font-medium hover:text-blue-700 transition-colors duration-200 cursor-pointer"
-            onClick={()=>navigate('/earnings')}
+              onClick={() => navigate('/earnings')}
             >
               View All
             </button>
@@ -217,7 +288,6 @@ const Dashboard: React.FC = () => {
         </div>
       </div>
 
-      {/* Subscription Plans Distribution */}
       <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center">
@@ -251,7 +321,7 @@ const Dashboard: React.FC = () => {
                   ))}
                 </Pie>
                 <Tooltip 
-                  formatter={(value) => [`${value}%`, 'Share']}
+                  formatter={(value) => [`${value}`, 'Technicians']}
                   contentStyle={{ 
                     backgroundColor: 'rgba(255, 255, 255, 0.95)', 
                     border: 'none', 
@@ -277,8 +347,8 @@ const Dashboard: React.FC = () => {
                     <h4 className="text-md font-semibold text-gray-900">{item.name}</h4>
                   </div>
                   <div className="flex items-end justify-between mt-2">
-                    <p className="text-2xl font-bold" style={{ color: item.color }}>{item.value}%</p>
-                    <div className="text-sm text-gray-500">of total</div>
+                    <p className="text-2xl font-bold" style={{ color: item.color }}>{item.value}</p>
+                    <div className="text-sm text-gray-500">technicians</div>
                   </div>
                 </div>
               ))}
