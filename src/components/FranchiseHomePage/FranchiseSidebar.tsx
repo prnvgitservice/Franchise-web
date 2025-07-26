@@ -9,6 +9,7 @@ import {
   UserPlus,
   X,
   Menu,
+  CreditCard,
 } from 'lucide-react';
 
 interface FranchiseSidebarProps {
@@ -21,6 +22,7 @@ const menuItems = [
   { name: 'Profile', href: '/profile', icon: User },
   { name: 'Technicians', href: '/technicians', icon: Users },
   { name: 'Earnings', href: '/earnings', icon: DollarSign },
+  { name: 'FranchisePlans', href: '/franchiseSubscription', icon: CreditCard },
   // { name: 'Refer Technician', href: '/refer', icon: UserPlus },
 ];
 

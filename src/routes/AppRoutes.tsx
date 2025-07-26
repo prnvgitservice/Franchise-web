@@ -18,6 +18,7 @@ import PlanDetailsPage from '../pages/PlanDetailsPage';
 import AddTechnician from '../components/FranchiseHomePage/AddTechnician';
 import BuySubscription from '../components/FranchiseHomePage/BuySubscription';
 import TechnicianView from '../components/FranchiseHomePage/TechinicianView';
+import FranchiseSubscription from '../components/FranchiseHomePage/FranchiseSubscription';
 
 const AppRoutes = () => {
     return (
@@ -35,6 +36,7 @@ const AppRoutes = () => {
                 <Route path="/earnings" element={<Earnings />} />
                 <Route path="/buyPlan" element={<BuySubscription />} />
                 <Route path="/technician/:id" element={<TechnicianView />} />
+                <Route path='/franchiseSubscription' element={<FranchiseSubscription />}/>
                 
                 {/* <Route path="/refer" element={<Refer />} /> */}
             </Route>
