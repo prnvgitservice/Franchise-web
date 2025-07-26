@@ -1,7 +1,10 @@
 import React from 'react';
 import { Calendar, Users, CheckCircle, DollarSign, Star, Clock, User, Monitor, CreditCard } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const Dashboard: React.FC = () => {
+const navigate = useNavigate()
+
   const today = new Date();
   const dateString = today.toLocaleDateString('en-US', {
     weekday: 'long',
@@ -20,10 +23,17 @@ const Dashboard: React.FC = () => {
     },
     {
       title: 'Total Subscriptions',
-      value: '1',
+      value: '3',
       icon: CreditCard,
       color: 'bg-green-100 text-green-600',
       iconBg: 'bg-green-100'
+    },
+    {
+      title: 'Total Earnings',
+      value: '₹45,00',
+      icon: DollarSign,
+      color: 'bg-yellow-100 text-yellow-600',
+      iconBg: 'bg-yellow-100'
     },
     {
       title: 'Monthly Earnings',
@@ -32,7 +42,7 @@ const Dashboard: React.FC = () => {
       color: 'bg-yellow-100 text-yellow-600',
       iconBg: 'bg-yellow-100'
     },
-    { title: 'Total Referrals', value: '12', icon: Users, color: 'bg-blue-100 text-blue-600', iconBg: 'bg-yellow-100' }
+    // { title: 'Total Referrals', value: '12', icon: Users, color: 'bg-blue-100 text-blue-600', iconBg: 'bg-yellow-100' }
   ];
 
   const monthlyEarnings = [
@@ -165,9 +175,11 @@ const Dashboard: React.FC = () => {
               <div className="p-2 bg-green-100 rounded-lg mr-3">
                 <Clock className="h-5 w-5 text-green-600" />
               </div>
-              <h3 className="text-lg font-semibold text-gray-900">Recent Activities</h3>
+              <h3 className="text-lg font-semibold text-gray-900">Recent Earnings</h3>
             </div>
-            <button className="text-blue-600 text-sm font-medium hover:text-blue-700 transition-colors duration-200">
+            <button className="text-blue-600 text-sm font-medium hover:text-blue-700 transition-colors duration-200 cursor-pointer"
+            onClick={()=>navigate('/earnings')}
+            >
               View All
             </button>
           </div>
