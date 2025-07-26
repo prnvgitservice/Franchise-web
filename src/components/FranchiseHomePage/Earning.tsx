@@ -12,10 +12,10 @@ const Earnings: React.FC = () => {
   ];
 
   const recentEarnings = [
-    { date: '2025-07-18', service: 'AC Repair', amount: 800, customer: 'John Smith' },
-    { date: '2025-07-15', service: 'Plumbing Fix', amount: 450, customer: 'Sarah Johnson' },
-    { date: '2025-07-12', service: 'Electrical Work', amount: 620, customer: 'Mike Wilson' },
-    { date: '2025-07-10', service: 'HVAC Maintenance', amount: 750, customer: 'Emily Davis' },
+    { date: '2025-07-18', service: 'AC Repair', amount: 800, customer: 'John Smith',plan: 'Economy Plan' },
+    { date: '2025-07-15', service: 'Plumbing Fix', amount: 450, customer: 'Sarah Johnson',plan: 'Gold Plan'},
+    { date: '2025-07-12', service: 'Electrical Work', amount: 620, customer: 'Mike Wilson',plan: 'Gold Plan'},
+    { date: '2025-07-10', service: 'HVAC Maintenance', amount: 750, customer: 'Emily Davis',plan: 'Platinum Plan' },
   ];
 
   return (
@@ -46,7 +46,7 @@ const Earnings: React.FC = () => {
           </div>
         </div>
 
-        <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+        {/* <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-medium text-gray-600">Average Per Service</p>
@@ -56,11 +56,11 @@ const Earnings: React.FC = () => {
               <TrendingUp className="h-6 w-6 text-purple-600" />
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
 
       {/* Earnings Chart */}
-      <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+      {/* <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
         <div className="flex items-center justify-between mb-6">
           <h3 className="text-lg font-semibold text-gray-900">Monthly Earnings</h3>
           <button className="flex items-center text-blue-600 hover:text-blue-700 transition-colors duration-200">
@@ -85,18 +85,19 @@ const Earnings: React.FC = () => {
             </div>
           ))}
         </div>
-      </div>
+      </div> */}
 
       {/* Recent Earnings */}
       <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-        <h3 className="text-lg font-semibold text-gray-900 mb-6">Recent Earnings</h3>
+        <h3 className="text-lg font-semibold text-gray-900 mb-6">Earnings</h3>
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
               <tr className="border-b border-gray-200">
                 <th className="text-left py-3 px-4 font-medium text-gray-700">Date</th>
-                <th className="text-left py-3 px-4 font-medium text-gray-700">Service</th>
-                <th className="text-left py-3 px-4 font-medium text-gray-700">Customer</th>
+                <th className="text-left py-3 px-4 font-medium text-gray-700">Category</th>
+                <th className="text-left py-3 px-4 font-medium text-gray-700">Technician</th>
+                <th className="text-left py-3 px-4 font-medium text-gray-700">Plan</th>
                 <th className="text-right py-3 px-4 font-medium text-gray-700">Amount</th>
               </tr>
             </thead>
@@ -106,6 +107,7 @@ const Earnings: React.FC = () => {
                   <td className="py-3 px-4 text-gray-700">{earning.date}</td>
                   <td className="py-3 px-4 text-gray-700">{earning.service}</td>
                   <td className="py-3 px-4 text-gray-700">{earning.customer}</td>
+                  <td className="py-3 px-4 text-gray-700">{earning.plan}</td>
                   <td className="py-3 px-4 text-right font-semibold text-green-600">₹{earning.amount}</td>
                 </tr>
               ))}
