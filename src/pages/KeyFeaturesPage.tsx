@@ -3,7 +3,7 @@ import React from "react";
 const KeyFeaturesPage: React.FC = () => {
   return (
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-gray-800">
-        <h1 className="text-4xl font-bold text-center text-red-500 mb-8">Key Features</h1>
+        <h1 className="text-4xl font-bold text-center text-blue-600 mb-8">Key Features</h1>
 
         <section className="mb-10">
           <h2 className="text-2xl font-semibold text-gray-900 mb-4">NO MIDDLEMEN - NO COMMISSIONS</h2>
@@ -93,7 +93,7 @@ const KeyFeaturesPage: React.FC = () => {
             <li><strong>Training</strong>: Only computer support is provided, not field training.</li>
             <li><strong>Verification</strong>: Submit Aadhar, PAN, and referrals for activation.</li>
             <li><strong>GST Compliance</strong>: Providers must follow applicable GST rules.</li>
-            <li><strong>Renewal</strong>: Every 30 days. Inactive profiles won’t show.</li>
+            <li><strong>Renewal</strong>: Every 30 days. Inactive profiles won't show.</li>
             <li><strong>Plan Changes</strong>: Switch anytime. No refunds, only adjustments.</li>
             <li><strong>Profile Management</strong>: Full control of profile and content.</li>
             <li><strong>Pin Code Changes</strong>: Only during renewal.</li>

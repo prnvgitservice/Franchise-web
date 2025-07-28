@@ -48,7 +48,7 @@ const AppRoutes = () => {
             <Route path="/about" element={<AboutUs />} />
             <Route path="/subscription" element={<SubscriptionPage />} />
             <Route path="/subscription/:subscriptionId" element={<PlanDetailsPage/>} />
-            <Route path="/key-features" element={<KeyFeaturesPage />} />
+            <Route path="/features" element={<KeyFeaturesPage />} />
             
             <Route path="*" element={<NotFound />} />
         </Routes>
