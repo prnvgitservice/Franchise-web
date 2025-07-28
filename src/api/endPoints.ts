@@ -62,5 +62,15 @@ const endpoints: any = {
     method: "put",
     url: () => `/api/techAuth/updateTechByFranchaise`
   },
+
+  getFranchisePlans: {
+    method: "get",
+    url: () => `/api/franchiseSubscription/franchisePlans`
+  },
+
+  getFranchiseSubscriptionPlan: {
+    method: "get",
+    url: (franchiseId: string) => `/api/franchiseSubscriptionDetails/getFranchiseSubscriptionPlan/${franchiseId}`
+  },
 }
 export default endpoints;
