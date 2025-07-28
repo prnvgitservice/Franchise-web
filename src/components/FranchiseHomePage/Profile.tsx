@@ -26,13 +26,14 @@ const Profile = () => {
 
   const fetchProfile = async () => {
     try {
-      const franchiseId = localStorage.getItem("userId");
-      if (!franchiseId) {
+      const Id = localStorage.getItem("userId");
+      if (!Id) {
         throw new Error("Franchise ID is missing");
       }
 
-      const response = await getFranchaseProfile(franchiseId);
+      const response = await getFranchaseProfile(Id);
       if (response && response.success) {
+        console.log("Profile data fetched successfully:", response?.result);
         setProfileData({
           id: response.result.id || "",
           username: response.result.username || "",
@@ -43,7 +44,7 @@ const Profile = () => {
           city: response.result.city || "",
           state: response.result.state || "",
           pincode: response.result.pincode || "",
-          franchiseId: response?.result?.franchaseId || "",
+          franchiseId: response?.result?.franchiseId || "",
           profileImage: response.result.profileImage || "",
         });
         setLoading(false);
@@ -80,7 +81,7 @@ const Profile = () => {
 
   const handleImageClick = () => {
     if (isEditing) {
-      fileInputRef.current.click();
+      fileInputRef?.current.click();
     }
   };
 

@@ -88,13 +88,13 @@ const Dashboard: React.FC = () => {
 
   function getColorForPlan(planName: string): string {
     const colorMap: Record<string, string> = {
-      'Economy Plan': '#3B82F6', // Blue
-      'Gold Plan': '#F59E0B',    // Yellow
-      'Platinum Plan': '#8B5CF6', // Purple
-      'Basic Plan': '#10B981',   // Green
-      'Premium Plan': '#EC4899'  // Pink
+      'Economy Plan': '#10B981',
+      'Gold Plan': '#F59E0B',
+      'Platinum Plan': '#3B82F6',
+      'Basic Plan': '#8B5CF6',
+      'Premium Plan': '#EC4899'
     };
-    return colorMap[planName] || '#6B7280'; // Gray as fallback
+    return colorMap[planName] || '#6B7280';
   }
 
   const stats = [
@@ -171,6 +171,14 @@ const Dashboard: React.FC = () => {
       icon: CreditCard
     }
   ];
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <p className="text-lg text-gray-600">Loading...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6 max-w-7xl mx-auto scrollbar-hide">
@@ -295,44 +303,26 @@ const Dashboard: React.FC = () => {
             </div>
             <h3 className="text-lg font-semibold text-gray-900">Subscription Plans</h3>
           </div>
-          <button className="text-blue-400 text-sm font-medium hover:text-blue-500 transition-colors duration-300 cursor-pointer"
-            onClick={() => navigate('/earnings')}>
+          <button 
+          className="text-blue-600 text-sm font-medium hover:text-blue-700 transition-colors duration-200 cursor-pointer"
+            onClick={() => navigate('/technicians')}
+          >
             View Details
           </button>
         </div>
-        
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <div className="h-[300px]">
-            <ResponsiveContainer width="100%" height="100%">
-              <PieChart>
-                <Pie
-                  data={subscriptionData}
-                  cx="50%"
-                  cy="50%"
-                  innerRadius={60}
-                  outerRadius={100}
-                  paddingAngle={5}
-                  dataKey="value"
-                  label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
-                >
-                  {subscriptionData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={entry.color} />
-                  ))}
-                </Pie>
-                <Tooltip 
-                  formatter={(value) => [`${value}`, 'Technicians']}
-                  contentStyle={{ 
-                    backgroundColor: 'rgba(255, 255, 255, 0.95)', 
-                    border: 'none', 
-                    borderRadius: '12px',
-                    boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)'
-                  }} 
-                />
-                <Legend />
-              </PieChart>
-            </ResponsiveContainer>
+
+        {technicians.length === 0 ? (
+          <div className="text-center py-6">
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">No Technicians Found</h3>
+            <p className="text-gray-500">It seems there are no technicians available at the moment.</p>
+            <button
+              className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200"
+              onClick={() => navigate('/technicians')}
+            >
+              Add Technicians
+            </button>
           </div>
-          
+        ) : (
           <div className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {subscriptionData.map((item, index) => {
@@ -365,22 +355,19 @@ const Dashboard: React.FC = () => {
                     className={`flex flex-col p-4 rounded-lg shadow-md transition-all duration-200 hover:shadow-lg hover:scale-[1.03] min-h-[100px] ${gradientClass}`}
                   >
                     <div className="flex items-center mb-2">
-                      <div 
-                        className="w-3 h-3 rounded-full mr-3" 
-                        style={{ backgroundColor: item.color }}
-                      ></div>
-                      <h4 className={`text-md font-semibold ${textColor}`}>{item.name}</h4>
+                      <div className="w-3 h-3 rounded-full mr-3" style={{ backgroundColor: item.color }}></div>
+                      <h4 className="text-md font-semibold text-gray-900">{item.name}</h4>
                     </div>
                     <div className="flex items-end justify-between mt-2">
-                      <p className={`text-2xl font-bold ${textColor}`}>{item.value}</p>
-                      <div className={`text-sm ${textColor} opacity-80`}>technicians</div>
+                      <p className="text-2xl font-bold" style={{ color: item.color }}>{item.value}</p>
+                      <div className="text-sm text-gray-500">technicians</div>
                     </div>
                   </div>
                 );
               })}
+            </div>  
             </div>
-          </div>
-        </div>
+        )}
       </div>
     </div>
   );

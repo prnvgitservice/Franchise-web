@@ -6,6 +6,7 @@ interface Subscription {
   subscriptionName: string;
   startDate: string;
   endDate: string;
+  leads?: number; // Optional, in case the subscription is based on leads
   _id: string;
 }
 
@@ -79,7 +80,8 @@ const TechnicianView: React.FC = () => {
           <p><span className="font-medium text-gray-600">Subscription Name:</span> {technician.subscription?.subscriptionName || 'N/A'}</p>
           {/* <p><span className="font-medium text-gray-600">Subscription ID:</span> {technician.subscription?.subscriptionId || 'N/A'}</p> */}
           <p><span className="font-medium text-gray-600">Start Date:</span> {technician.subscription?.startDate ? formatDate(technician.subscription.startDate) : 'N/A'}</p>
-          <p><span className="font-medium text-gray-600">End Date:</span> {technician.subscription?.endDate ? formatDate(technician.subscription.endDate) : 'N/A'}</p>
+          <p><span className="font-medium text-gray-600">End Date:</span> {technician.subscription?.endDate ? formatDate(technician.subscription.endDate) : technician.subscription?.leads ? `${technician.subscription.leads} leads` : 'N/A'}
+</p>
         </div>
       </div>
     </div>

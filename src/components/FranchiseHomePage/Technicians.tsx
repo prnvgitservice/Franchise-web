@@ -221,7 +221,7 @@ const Technicians: React.FC = () => {
                     </td>
                     <td className="py-4 px-6">
                       <span className="text-gray-700">
-                        {tech.subscription?.endDate ? formatDate(tech.subscription.endDate) : 'N/A'}
+                        {tech.subscription?.endDate ? formatDate(tech.subscription.endDate) : tech.subscription?.leads ? `${tech.subscription.leads} leads` : 'N/A'}
                       </span>
                     </td>
                     <td className="py-4 px-6">

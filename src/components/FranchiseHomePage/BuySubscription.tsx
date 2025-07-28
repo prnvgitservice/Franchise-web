@@ -12,6 +12,7 @@ const BuySubscription = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  console.log("technicianData", technicianData);
   const paymentMethods = [
     {
       id: 'upi',
@@ -61,29 +62,29 @@ const BuySubscription = () => {
 
     try {
       // Step 1: Process subscription payment
-      const subscriptionData = {
-        technicianId: localStorage.getItem('userId'),
-        subscriptionId: plan._id,
-      };
+      // const subscriptionData = {
+      //   technicianId: localStorage.getItem('userId'),
+      //   subscriptionId: plan._id,
+      // };
 
-      const subscriptionResponse = await addTechSubscriptionPlan(subscriptionData);
+      // const subscriptionResponse = await addTechSubscriptionPlan(subscriptionData);
 
-      if (!subscriptionResponse?.success) {
-        throw new Error(subscriptionResponse?.message || 'Failed to process subscription payment');
-      }
+      // if (!subscriptionResponse?.success) {
+      //   throw new Error(subscriptionResponse?.message || 'Failed to process subscription payment');
+      // }
 
       // Step 2: Register technician with full payload
       const technicianPayload = {
-        username: technicianData.username,
-        franchiseId: technicianData.franchiseId,
-        category: technicianData.category,
-        phoneNumber: technicianData.phoneNumber,
-        password: technicianData.password,
-        buildingName: technicianData.buildingName,
-        areaName: technicianData.areaName,
-        city: technicianData.city,
-        state: technicianData.state,
-        pincode: technicianData.pincode,
+        username: technicianData?.username,
+        franchiseId: technicianData?.franchiseId || localStorage.getItem('userId'),
+        category: technicianData?.category,
+        phoneNumber: technicianData?.phoneNumber,
+        password: technicianData?.password,
+        buildingName: technicianData?.buildingName,
+        areaName: technicianData?.areaName,
+        city: technicianData?.city,
+        state: technicianData?.state,
+        pincode: technicianData?.pincode,
         subscriptionId: plan._id,
       };
 

@@ -25,3 +25,6 @@ export const getAllTechniciansByFranchise = (franchiseId: string) => apiRequest(
 
 export const updateTechByFranchise = (data: any) => apiRequest("updateTechByFranchise", data)
 
+export const getFranchisePlans = (data: any) => apiRequest('getFranchisePlans', data);
+
+export const getFranchiseSubscriptionPlan = (franchiseId : string) => apiRequest('getFranchiseSubscriptionPlan', null, franchiseId);
