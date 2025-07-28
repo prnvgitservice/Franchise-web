@@ -287,7 +287,7 @@ const Technicians: React.FC = () => {
       </div>
 
       {/* Summary Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
           <p className="text-sm text-gray-600">Total Technicians</p>
           <p className="text-2xl font-bold text-gray-900">{allTechs.length}</p>
@@ -298,7 +298,7 @@ const Technicians: React.FC = () => {
             {new Set(allTechs.map(tech => tech.subscription?.subscriptionName)).size}
           </p>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };
