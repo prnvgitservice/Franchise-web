@@ -119,16 +119,13 @@ const Dashboard: React.FC = () => {
       color: 'bg-yellow-100 text-yellow-600',
       iconBg: 'bg-yellow-100'
     },
-
-      {
+    {
       title: 'Monthly Earnings',
       value: '₹45,00',
       icon: DollarSign,
       color: 'bg-yellow-100 text-yellow-600',
       iconBg: 'bg-yellow-100'
     },
-
-    
   ];
 
   const monthlyEarnings = [
@@ -177,23 +174,24 @@ const Dashboard: React.FC = () => {
 
   return (
     <div className="space-y-6 max-w-7xl mx-auto scrollbar-hide">
-      <div className="bg-gradient-to-r from-blue-500 via-purple-500 to-purple-600 rounded-2xl p-6 text-white relative overflow-hidden">
+      {/* Updated with indigo to teal gradient */}
+      <div className="bg-gradient-to-r from-indigo-600 to-teal-500 rounded-2xl p-6 text-white relative overflow-hidden">
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between">
           <div className="mb-4 lg:mb-0">
             <h1 className="text-2xl lg:text-3xl font-bold mb-2">
               Welcome back, Franchise
             </h1>
-            <p className="text-blue-100 text-lg">
+            <p className="text-indigo-100 text-lg">
               Here's your performance overview for today
             </p>
           </div>
-          <div className="bg-white/20 backdrop-blur-sm rounded-xl p-4 border border-white/30">
-            <p className="text-sm text-blue-100 mb-1">Today's Date</p>
+          <div className="bg-indigo-700/30 backdrop-blur-sm rounded-xl p-4 border border-teal-400/30">
+            <p className="text-sm text-indigo-100 mb-1">Today's Date</p>
             <p className="text-lg font-semibold">{dateString}</p>
           </div>
         </div>
-        <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -translate-y-16 translate-x-16"></div>
-        <div className="absolute bottom-0 left-0 w-24 h-24 bg-white/10 rounded-full translate-y-12 -translate-x-12"></div>
+        <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-500/20 rounded-full -translate-y-16 translate-x-16"></div>
+        <div className="absolute bottom-0 left-0 w-24 h-24 bg-teal-500/20 rounded-full translate-y-12 -translate-x-12"></div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -222,8 +220,8 @@ const Dashboard: React.FC = () => {
         <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center">
-              <div className="p-2 bg-blue-100 rounded-lg mr-3">
-                <DollarSign className="h-5 w-5 text-blue-600" />
+              <div className="p-2 bg-indigo-100 rounded-lg mr-3">
+                <DollarSign className="h-5 w-5 text-indigo-600" />
               </div>
               <h3 className="text-lg font-semibold text-gray-900">Monthly Earnings</h3>
             </div>
@@ -235,8 +233,9 @@ const Dashboard: React.FC = () => {
                 <span className="text-gray-700 font-medium w-12">{item.month}</span>
                 <div className="flex items-center space-x-4 flex-1">
                   <div className="flex-1 bg-gray-200 rounded-full h-3 mx-4">
+                    {/* Updated with indigo to teal gradient */}
                     <div
-                      className="bg-gradient-to-r from-blue-500 to-purple-600 h-3 rounded-full transition-all duration-300"
+                      className="bg-gradient-to-r from-indigo-600 to-teal-500 h-3 rounded-full transition-all duration-300"
                       style={{ width: `${(item.amount / 50000) * 100}%` }}
                     ></div>
                   </div>
@@ -296,7 +295,7 @@ const Dashboard: React.FC = () => {
             </div>
             <h3 className="text-lg font-semibold text-gray-900">Subscription Plans</h3>
           </div>
-          <button className="text-blue-600 text-sm font-medium hover:text-blue-700 transition-colors duration-200 cursor-pointer"
+          <button className="text-blue-400 text-sm font-medium hover:text-blue-500 transition-colors duration-300 cursor-pointer"
             onClick={() => navigate('/earnings')}>
             View Details
           </button>
@@ -342,13 +341,13 @@ const Dashboard: React.FC = () => {
                 
                 // Apply different gradients based on plan name
                 if (item.name === "Economy Plan") {
-                  gradientClass = "bg-gradient-to-br from-blue-500 to-blue-600";
+                  gradientClass = "bg-gradient-to-br from-blue-400 to-blue-500";
                   textColor = "text-white";
                 } else if (item.name === "Gold Plan") {
-                  gradientClass = "bg-gradient-to-br from-yellow-400 to-yellow-600";
+                  gradientClass = "bg-gradient-to-br from-yellow-400 to-yellow-500";
                   textColor = "text-white";
                 } else if (item.name === "Platinum Plan") {
-                  gradientClass = "bg-gradient-to-br from-purple-500 to-purple-700";
+                  gradientClass = "bg-gradient-to-br from-purple-400 to-purple-500";
                   textColor = "text-white";
                 } else if (item.name === "Basic Plan") {
                   gradientClass = "bg-gradient-to-br from-green-500 to-green-600";
