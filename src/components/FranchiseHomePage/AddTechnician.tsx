@@ -205,7 +205,7 @@ const AddTechnician: React.FC = () => {
       )}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {[
-          { id: 'username', label: 'Username', type: 'text', placeholder: 'Enter username' },
+          { id: 'technicianName', label: 'Technician Name', type: 'text', placeholder: 'Enter technician name' },
           { id: 'category', label: 'Category', type: 'select' },
           { id: 'phoneNumber', label: 'Phone Number', type: 'tel', pattern: '[0-9]{10}', placeholder: 'Enter 10-digit phone number' },
           { id: 'password', label: 'Password', type: 'password', minLength: 6, maxLength: 10, placeholder: '6-10 characters' },
@@ -227,7 +227,7 @@ const AddTechnician: React.FC = () => {
                 value={formData.category}
                 onChange={handleChange}
                 required
-                className="mt-1 block w-full px-4 py-3 border border-none rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition duration-200 bg-white hover:bg-indigo-50"
+                className="mt-1 block w-full px-4 py-3 border border-none rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition duration-200 bg-white"
               >
                 <option value="" disabled>Select a category</option>
                 {apiCategories
@@ -250,7 +250,7 @@ const AddTechnician: React.FC = () => {
                   onChange={handleChange}
                   minLength={minLength}
                   maxLength={maxLength}
-                  className="mt-1 block w-full px-4 py-3 border border-none rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition duration-200 bg-white hover:bg-indigo-50 pr-10"
+                  className="mt-1 block w-full px-4 py-3 border border-none rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition duration-200 bg-white "
                 />
                 <span
                   className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer text-indigo-500 hover:text-amber-500 transition"
@@ -266,7 +266,7 @@ const AddTechnician: React.FC = () => {
                 value={formData.pincode}
                 onChange={handleChange}
                 required
-                className="mt-1 block w-full px-4 py-3 border border-none rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition duration-200 bg-white hover:bg-indigo-50"
+                className="mt-1 block w-full px-4 py-3 border border-none rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition duration-200 bg-white"
               >
                 <option value="" disabled>Select Pincode</option>
                 {pincodeData.map((p) => (
@@ -283,7 +283,7 @@ const AddTechnician: React.FC = () => {
                 onChange={handleChange}
                 required
                 disabled={!selectedPincode}
-                className="mt-1 block w-full px-4 py-3 border border-none rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition duration-200 bg-white hover:bg-indigo-50 disabled:bg-gray-100"
+                className="mt-1 block w-full px-4 py-3 border border-none rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition duration-200 bg-white disabled:bg-gray-100"
               >
                 <option value="" disabled>Select Area</option>
                 {areaOptions.map((a) => (
@@ -300,7 +300,7 @@ const AddTechnician: React.FC = () => {
                 onChange={handleChange}
                 required
                 disabled={!selectedPincode}
-                className="mt-1 block w-full px-4 py-3 border border-none rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition duration-200 bg-white hover:bg-indigo-50 disabled:bg-gray-100"
+                className="mt-1 block w-full px-4 py-3 border border-none rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition duration-200 bg-white disabled:bg-gray-100"
               >
                 <option value="" disabled>Select City</option>
                 {selectedPincode && pincodeData.find((p) => p.code === selectedPincode) && (
@@ -317,7 +317,7 @@ const AddTechnician: React.FC = () => {
                 onChange={handleChange}
                 required
                 disabled={!selectedPincode}
-                className="mt-1 block w-full px-4 py-3 border border-none rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition duration-200 bg-white hover:bg-indigo-50 disabled:bg-gray-100"
+                className="mt-1 block w-full px-4 py-3 border border-none rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition duration-200 bg-white disabled:bg-gray-100"
               >
                 <option value="" disabled>Select State</option>
                 {selectedPincode && pincodeData.find((p) => p.code === selectedPincode) && (
@@ -333,7 +333,7 @@ const AddTechnician: React.FC = () => {
                 value={formData.subscriptionId}
                 onChange={handleChange}
                 required
-                className="mt-1 block w-full px-4 py-3 border border-none rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition duration-200 bg-white hover:bg-indigo-50"
+                className="mt-1 block w-full px-4 py-3 border border-none rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition duration-200 bg-white"
               >
                 <option value="" disabled>Select Subscription Plan</option>
                 {subscriptionPlans
@@ -354,7 +354,7 @@ const AddTechnician: React.FC = () => {
                 value={formData[id as keyof TechnicianData]}
                 onChange={handleChange}
                 pattern={pattern}
-                className="mt-1 block w-full px-4 py-3 border border-none rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition duration-200 bg-white hover:bg-indigo-50"
+                className="mt-1 block w-full px-4 py-3 border border-none rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition duration-200 bg-white"
               />
             )}
           </div>
@@ -625,7 +625,7 @@ export default AddTechnician;
 //                 onChange={handleChange}
 //                 required
 //                 aria-label={label}
-//                 className="mt-1 block w-full px-4 py-3 border border-none rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition duration-200 bg-white hover:bg-indigo-50"
+//                 className="mt-1 block w-full px-4 py-3 border border-none rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition duration-200 bg-white"
 //               >
 //                 <option value="" disabled>Select a category</option>
 //                 {apiCategories.length === 0 ? (
@@ -653,7 +653,7 @@ export default AddTechnician;
 //                   minLength={6}
 //                   maxLength={10}
 //                   aria-label={label}
-//                   className="mt-1 block w-full px-4 py-3 border border-none rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition duration-200 bg-white hover:bg-indigo-50 pr-10"
+//                   className="mt-1 block w-full px-4 py-3 border border-none rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition duration-200 bg-white "
 //                 />
 //                 <span
 //                   className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer text-indigo-500 hover:text-amber-500 transition"
@@ -671,7 +671,7 @@ export default AddTechnician;
 //                 onChange={handleChange}
 //                 required
 //                 aria-label={label}
-//                 className="mt-1 block w-full px-4 py-3 border border-none rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition duration-200 bg-white hover:bg-indigo-50"
+//                 className="mt-1 block w-full px-4 py-3 border border-none rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition duration-200 bg-white"
 //               >
 //                 <option value="" disabled>Select Pincode</option>
 //                 {pincodeData.length === 0 ? (
@@ -693,7 +693,7 @@ export default AddTechnician;
 //                 required
 //                 disabled={!selectedPincode}
 //                 aria-label={label}
-//                 className="mt-1 block w-full px-4 py-3 border border-none rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition duration-200 bg-white hover:bg-indigo-50 disabled:bg-gray-100"
+//                 className="mt-1 block w-full px-4 py-3 border border-none rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition duration-200 bg-white disabled:bg-gray-100"
 //               >
 //                 <option value="" disabled>Select Area</option>
 //                 {areaOptions.length === 0 ? (
@@ -715,7 +715,7 @@ export default AddTechnician;
 //                 required
 //                 disabled={!selectedPincode}
 //                 aria-label={label}
-//                 className="mt-1 block w-full px-4 py-3 border border-none rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition duration-200 bg-white hover:bg-indigo-50 disabled:bg-gray-100"
+//                 className="mt-1 block w-full px-4 py-3 border border-none rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition duration-200 bg-white disabled:bg-gray-100"
 //               >
 //                 <option value="" disabled>Select City</option>
 //                 {selectedPincode && pincodeData.find((p) => p.code === selectedPincode) && (
@@ -733,7 +733,7 @@ export default AddTechnician;
 //                 required
 //                 disabled={!selectedPincode}
 //                 aria-label={label}
-//                 className="mt-1 block w-full px-4 py-3 border border-none rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition duration-200 bg-white hover:bg-indigo-50 disabled:bg-gray-100"
+//                 className="mt-1 block w-full px-4 py-3 border border-none rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition duration-200 bg-white disabled:bg-gray-100"
 //               >
 //                 <option value="" disabled>Select State</option>
 //                 {selectedPincode && pincodeData.find((p) => p.code === selectedPincode) && (
@@ -750,7 +750,7 @@ export default AddTechnician;
 //                 onChange={handleChange}
 //                 required
 //                 aria-label={label}
-//                 className="mt-1 block w-full px-4 py-3 border border-none rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition duration-200 bg-white hover:bg-indigo-50"
+//                 className="mt-1 block w-full px-4 py-3 border border-none rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition duration-200 bg-white"
 //               >
 //                 <option value="" disabled>Select Subscription Plan</option>
 //                 {subscriptionPlans.length === 0 ? (
@@ -775,7 +775,7 @@ export default AddTechnician;
 //                 value={formData[id as keyof TechnicianData]}
 //                 onChange={handleChange}
 //                 aria-label={label}
-//                 className="mt-1 block w-full px-4 py-3 border border-none rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition duration-200 bg-white hover:bg-indigo-50"
+//                 className="mt-1 block w-full px-4 py-3 border border-none rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition duration-200 bg-white"
 //               />
 //             )}
 //             {fieldErrors[id as keyof TechnicianData] && (
@@ -1046,7 +1046,7 @@ export default AddTechnician;
 //                 value={formData.category}
 //                 onChange={handleChange}
 //                 required
-//                 className="mt-1 block w-full px-4 py-3 border border-none rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition duration-200 bg-white hover:bg-indigo-50"
+//                 className="mt-1 block w-full px-4 py-3 border border-none rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition duration-200 bg-white"
 //               >
 //                 <option value="" disabled>Select a category</option>
 //                 {apiCategories
@@ -1069,7 +1069,7 @@ export default AddTechnician;
 //                   onChange={handleChange}
 //                   minLength={minLength}
 //                   maxLength={maxLength}
-//                   className="mt-1 block w-full px-4 py-3 border border-none rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition duration-200 bg-white hover:bg-indigo-50 pr-10"
+//                   className="mt-1 block w-full px-4 py-3 border border-none rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition duration-200 bg-white "
 //                 />
 //                 <span
 //                   className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer text-indigo-500 hover:text-amber-500 transition"
@@ -1085,7 +1085,7 @@ export default AddTechnician;
 //                 value={formData.pincode}
 //                 onChange={handleChange}
 //                 required
-//                 className="mt-1 block w-full px-4 py-3 border border-none rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition duration-200 bg-white hover:bg-indigo-50"
+//                 className="mt-1 block w-full px-4 py-3 border border-none rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition duration-200 bg-white"
 //               >
 //                 <option value="" disabled>Select Pincode</option>
 //                 {pincodeData.map((p) => (
@@ -1102,7 +1102,7 @@ export default AddTechnician;
 //                 onChange={handleChange}
 //                 required
 //                 disabled={!selectedPincode}
-//                 className="mt-1 block w-full px-4 py-3 border border-none rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition duration-200 bg-white hover:bg-indigo-50 disabled:bg-gray-100"
+//                 className="mt-1 block w-full px-4 py-3 border border-none rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition duration-200 bg-white disabled:bg-gray-100"
 //               >
 //                 <option value="" disabled>Select Area</option>
 //                 {areaOptions.map((a) => (
@@ -1119,7 +1119,7 @@ export default AddTechnician;
 //                 onChange={handleChange}
 //                 required
 //                 disabled={!selectedPincode}
-//                 className="mt-1 block w-full px-4 py-3 border border-none rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition duration-200 bg-white hover:bg-indigo-50 disabled:bg-gray-100"
+//                 className="mt-1 block w-full px-4 py-3 border border-none rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition duration-200 bg-white disabled:bg-gray-100"
 //               >
 //                 <option value="" disabled>Select City</option>
 //                 {selectedPincode && pincodeData.find((p) => p.code === selectedPincode) && (
@@ -1136,7 +1136,7 @@ export default AddTechnician;
 //                 onChange={handleChange}
 //                 required
 //                 disabled={!selectedPincode}
-//                 className="mt-1 block w-full px-4 py-3 border border-none rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition duration-200 bg-white hover:bg-indigo-50 disabled:bg-gray-100"
+//                 className="mt-1 block w-full px-4 py-3 border border-none rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition duration-200 bg-white disabled:bg-gray-100"
 //               >
 //                 <option value="" disabled>Select State</option>
 //                 {selectedPincode && pincodeData.find((p) => p.code === selectedPincode) && (
@@ -1152,7 +1152,7 @@ export default AddTechnician;
 //                 value={formData.subscriptionId}
 //                 onChange={handleChange}
 //                 required
-//                 className="mt-1 block w-full px-4 py-3 border border-none rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition duration-200 bg-white hover:bg-indigo-50"
+//                 className="mt-1 block w-full px-4 py-3 border border-none rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition duration-200 bg-white"
 //               >
 //                 <option value="" disabled>Select Subscription Plan</option>
 //                 {subscriptionPlans
@@ -1173,7 +1173,7 @@ export default AddTechnician;
 //                 value={formData[id as keyof TechnicianData]}
 //                 onChange={handleChange}
 //                 pattern={pattern}
-//                 className="mt-1 block w-full px-4 py-3 border border-none rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition duration-200 bg-white hover:bg-indigo-50"
+//                 className="mt-1 block w-full px-4 py-3 border border-none rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition duration-200 bg-white"
 //               />
 //             )}
 //           </div>

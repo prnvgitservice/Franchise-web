@@ -26,7 +26,7 @@ const AppRoutes = () => {
         <Routes>
             <Route element={<AuthLayout />}>
                 <Route path="/login/franchise" element={<FranchiseLogin />} />
-                <Route path="/signup/franchise" element={<FranchiseSignup />} />
+                {/* <Route path="/signup/franchise" element={<FranchiseSignup />} /> */}
             </Route>
 
             <Route element={<FranchiseLayout />}>

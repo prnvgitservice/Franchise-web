@@ -49,18 +49,19 @@ const TechnicianView: React.FC = () => {
     <div className="max-w-4xl mx-auto bg-white shadow-lg rounded-lg p-8 m-4">
       <h2 className="text-2xl font-bold text-gray-800 mb-6">Technician Details</h2>
       
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div className="space-y-3">
         <div>
           <h3 className="text-xl font-semibold text-gray-700 mb-3 pb-2 border-b">Personal Information</h3>
           <div className="space-y-3">
-            <p><span className="font-medium text-gray-600">Username:</span> {technician.username}</p>
+            <p><span className="font-medium text-gray-600">Technician Name:</span> {technician.username}</p>
             <p><span className="font-medium text-gray-600">Phone Number:</span> {technician.phoneNumber}</p>
-            <p><span className="font-medium text-gray-600">Role:</span> {technician.role}</p>
+            {/* <p><span className="font-medium text-gray-600">Role:</span> {technician.role}</p> */}
             <p><span className="font-medium text-gray-600">Category:</span> {technician.category}</p>
+            <p><span className="font-medium text-gray-600">Address:</span> {`${technician.buildingName}, ${technician.areaName}, ${technician.city}, ${technician.pincode}`}</p>
           </div>
         </div>
 
-        <div>
+        {/* <div>
           <h3 className="text-xl font-semibold text-gray-700 mb-3 pb-2 border-b">Location</h3>
           <div className="space-y-3">
             <p><span className="font-medium text-gray-600">Building:</span> {technician.buildingName}</p>
@@ -69,14 +70,14 @@ const TechnicianView: React.FC = () => {
             <p><span className="font-medium text-gray-600">State:</span> {technician.state}</p>
             <p><span className="font-medium text-gray-600">Pincode:</span> {technician.pincode}</p>
           </div>
-        </div>
+        </div> */}
       </div>
 
       <div className="mt-8">
-        <h3 className="text-xl font-semibold text-gray-700 mb-3 pb-2 border-b">Subscription Details</h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <h3 className="text-xl font-semibold text-gray-700 mb-3 pb-2 border-b">Subscription Information</h3>
+        <div className="space-y-3">
           <p><span className="font-medium text-gray-600">Subscription Name:</span> {technician.subscription?.subscriptionName || 'N/A'}</p>
-          <p><span className="font-medium text-gray-600">Subscription ID:</span> {technician.subscription?.subscriptionId || 'N/A'}</p>
+          {/* <p><span className="font-medium text-gray-600">Subscription ID:</span> {technician.subscription?.subscriptionId || 'N/A'}</p> */}
           <p><span className="font-medium text-gray-600">Start Date:</span> {technician.subscription?.startDate ? formatDate(technician.subscription.startDate) : 'N/A'}</p>
           <p><span className="font-medium text-gray-600">End Date:</span> {technician.subscription?.endDate ? formatDate(technician.subscription.endDate) : 'N/A'}</p>
         </div>
