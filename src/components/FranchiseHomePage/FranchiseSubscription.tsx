@@ -53,13 +53,13 @@ const FranchiseSubscription = () => {
     <div className="p-4 max-w-6xl mx-auto">
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-3xl font-bold text-gray-900">My Subscription Plan</h1>
-        <button 
+        {/* <button 
           onClick={() => navigate('/technician/plans')}
           className="px-3 py-2 border rounded-lg bg-purple-300 hover:bg-purple-400 flex text-purple-800 font-bold"
         >
           <EyeIcon />
           <span className='ms-1.5'> View All Plans</span>
-        </button>
+        </button> */}
       </div>
 
       {currentSubscription ? (

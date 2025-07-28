@@ -67,12 +67,12 @@ function Header() {
     <header className="bg-white shadow-sm border-b z-10 relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
-          <div className="flex-shrink-0 bg-blue-900 rounded px-1 py-1">
+          <div className="flex-shrink-0 bg-blue-900 rounded px-1 py-1 ">
             <button onClick={handleLogoClick}>
               <img
                 src="https://prnvservices.com/uploads/logo/1695377568_logo-white.png"
                 alt="Justdial Logo"
-                className="h-8 w-auto"
+                className="h-8 w-auto cursor-pointer"
               />
             </button>
           </div>
