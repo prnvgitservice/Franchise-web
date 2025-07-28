@@ -114,7 +114,7 @@ const Technicians: React.FC = () => {
           <p className="text-gray-600 mt-1">Manage and monitor all technicians in your network</p>
         </div>
         <button
-          className="mt-4 sm:mt-0 bg-blue-600 text-white px-4 py-2 rounded-xl hover:bg-blue-700 transition-colors duration-200 flex items-center"
+          className="mt-4 sm:mt-0 bg-gradient-to-r from-indigo-600 to-teal-500 text-white px-4 py-2 rounded-xl hover:from-indigo-700 hover:to-teal-600 transition-all duration-200 flex items-center"
           onClick={() => navigate('/addTechnician')}
           aria-label="Add new technician"
         >
@@ -196,7 +196,7 @@ const Technicians: React.FC = () => {
                   <tr key={tech.id} className="border-b border-gray-100 hover:bg-gray-50 transition-colors duration-200">
                     <td className="py-4 px-6">
                       <div className="flex items-center space-x-3">
-                        <div className="w-10 h-10 bg-gradient-to-r from-blue-400 to-purple-400 rounded-full flex items-center justify-center">
+                        <div className="w-10 h-10 bg-gradient-to-r from-indigo-400 to-teal-400 rounded-full flex items-center justify-center">
                           <span className="text-white font-medium text-sm">
                             {tech?.username.split(' ').map(n => n[0]).join('')}
                           </span>
@@ -269,7 +269,7 @@ const Technicians: React.FC = () => {
                 key={page}
                 className={`px-4 py-2 rounded-xl ${
                   currentPage === page
-                    ? 'bg-blue-600 text-white'
+                    ? 'bg-gradient-to-r from-indigo-600 to-teal-500 text-white'
                     : 'bg-gray-200 text-gray-700'
                 }`}
                 onClick={() => handlePageChange(page)}
@@ -296,9 +296,9 @@ const Technicians: React.FC = () => {
           <p className="text-sm text-gray-600">Total Technicians</p>
           <p className="text-2xl font-bold text-gray-900">{allTechs.length}</p>
         </div>
-        <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
-          <p className="text-sm text-gray-600">Unique Subscription Plans</p>
-          <p className="text-2xl font-bold text-purple-600">
+        <div className="bg-gradient-to-r from-indigo-500 to-teal-400 text-white rounded-xl p-4 shadow-sm">
+          <p className="text-sm text-indigo-100">Unique Subscription Plans</p>
+          <p className="text-2xl font-bold text-white">
             {new Set(allTechs.map(tech => tech.subscription?.subscriptionName)).size}
           </p>
         </div>
