@@ -28,3 +28,6 @@ export const updateTechByFranchise = (data: any) => apiRequest("updateTechByFran
 export const getFranchisePlans = (data: any) => apiRequest('getFranchisePlans', data);
 
 export const getFranchiseSubscriptionPlan = (franchiseId : string) => apiRequest('getFranchiseSubscriptionPlan', null, franchiseId);
+
+export const getFranchiseAccount = (franchiseId: string) => apiRequest('getFranchiseAccount',null, franchiseId);
+

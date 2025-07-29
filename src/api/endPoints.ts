@@ -72,5 +72,10 @@ const endpoints: any = {
     method: "get",
     url: (franchiseId: string) => `/api/franchiseSubscriptionDetails/getFranchiseSubscriptionPlan/${franchiseId}`
   },
+
+  getFranchiseAccount: {
+    method: 'get',
+    url:(franchiseId:string) => `/api/franchiseAccounts/getFranchiseAccount/${franchiseId}`
+  }
 }
 export default endpoints;
