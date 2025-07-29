@@ -31,3 +31,4 @@ export const getFranchiseSubscriptionPlan = (franchiseId : string) => apiRequest
 
 export const getFranchiseAccount = (franchiseId: string) => apiRequest('getFranchiseAccount',null, franchiseId);
 
+export const getFranchiseAccountValues =(franchiseId: string) => apiRequest('getFranchiseAccountValues', null, franchiseId);

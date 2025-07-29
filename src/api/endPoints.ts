@@ -76,6 +76,11 @@ const endpoints: any = {
   getFranchiseAccount: {
     method: 'get',
     url:(franchiseId:string) => `/api/franchiseAccounts/getFranchiseAccount/${franchiseId}`
+  },
+
+  getFranchiseAccountValues:{
+    method: 'get',
+    url:(franchiseId: string) => `/api/franchiseAccounts/getFranchiseAccountValues/${franchiseId}`
   }
 }
 export default endpoints;

@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useMemo } from 'react';
-import { DollarSign, Calendar } from 'lucide-react';
+import { DollarSign, Calendar, ArrowLeftRight } from 'lucide-react';
 import { getFranchiseAccount } from '../../api/apiMethods';
 
 type AccountEntry = {
@@ -119,7 +119,7 @@ const Earnings: React.FC = () => {
               </p>
             </div>
             <div className="p-3 bg-yellow-100 rounded-xl">
-              <span className="inline-block w-6 h-6 text-yellow-600 font-bold text-lg flex items-center justify-center">#</span>
+            <ArrowLeftRight className='text-yellow-600' />
             </div>
           </div>
         </div>

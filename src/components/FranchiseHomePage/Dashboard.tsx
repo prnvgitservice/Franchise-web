@@ -1,39 +1,30 @@
 import React, { useEffect, useState } from 'react';
-import { Calendar, Users, CheckCircle, DollarSign, Star, Clock, User, Monitor, CreditCard, Wrench } from 'lucide-react';
+import { Users, DollarSign, Clock, CreditCard, UserCog } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from 'recharts';
-import { getAllTechniciansByFranchise } from '../../api/apiMethods';
+import { getFranchiseAccount, getFranchiseAccountValues } from '../../api/apiMethods';
 
-interface Subscription {
-  subscriptionId: string;
-  subscriptionName: string;
-  startDate: string;
-  endDate: string;
-  leads: number | null;
-  ordersCount: number;
-  _id: string;
-}
-
-interface Technician {
-  id: string;
-  franchiseId: string;
-  username: string;
-  userId: string;
-  phoneNumber: string;
-  role: string;
-  category: string;
-  buildingName: string;
-  areaName: string;
-  city: string;
-  state: string;
-  pincode: string;
-  subscription: Subscription;
-}
+const PLAN_COLORS: Record<string, string> = {
+  'Economy Plan': '#10B981',
+  'Gold Plan': '#F59E0B',
+  'Platinum Plan': '#3B82F6',
+  'Basic Plan': '#8B5CF6',
+  'Premium Plan': '#EC4899',
+  'No Plan': '#6B7280'
+};
 
 const Dashboard: React.FC = () => {
   const navigate = useNavigate();
-  const [technicians, setTechnicians] = useState<Technician[]>([]);
   const [loading, setLoading] = useState(true);
+  const [accountValues, setAccountValues] = useState<null | {
+    totalEarnings: number;
+    totalThisMonthEarnings: number;
+    earningsByMonth: number[];
+    totalNoOfTechnicians: number;
+    totalNoOfSubscriptions: number;
+  }>(null);
+  const [recentEarnings, setRecentEarnings] = useState<any[]>([]);
+  const [subscriptionData, setSubscriptionData] = useState<{ name: string; value: number; color: string }[]>([]);
   const [error, setError] = useState('');
 
   const today = new Date();
@@ -44,133 +35,105 @@ const Dashboard: React.FC = () => {
     year: 'numeric'
   });
 
-  // Fetch technicians data
-  const fetchTechsByFranchise = async () => {
-    try {
-      setLoading(true);
-      setError('');
-      const franchiseId = localStorage.getItem('userId') || '';
-      const response = await getAllTechniciansByFranchise(franchiseId);
-      if (Array.isArray(response?.result)) {
-        setTechnicians(response.result);
-      } else {
-        setTechnicians([]);
-        setError('No technicians found');
-      }
-    } catch (error: any) {
-      setError(error?.message || 'Failed to fetch technicians');
-      setTechnicians([]);
-    } finally {
-      setLoading(false);
-    }
-  };
+   // Format currency
+   const formatCurrency = (amount: number) =>
+    `₹${amount.toLocaleString('en-IN', { maximumFractionDigits: 0 })}`;
 
   useEffect(() => {
-    fetchTechsByFranchise();
+    const fetchData = async () => {
+      setLoading(true);
+      setError('');
+      try {
+        const franchiseId = localStorage.getItem('userId') || '';
+        // Fetch account values
+        const valuesRes = await getFranchiseAccountValues(franchiseId);
+        if (valuesRes?.success && valuesRes?.result) {
+          setAccountValues(valuesRes?.result);
+        } else {
+          setAccountValues(null);
+        }
+
+        // Fetch recent earnings
+        const earningsRes = await getFranchiseAccount(franchiseId);
+        if (earningsRes?.success && Array.isArray(earningsRes?.result)) {
+          setRecentEarnings(earningsRes?.result);
+
+          // Calculate subscription distribution for pie chart
+          const planCounts: Record<string, number> = {};
+          earningsRes?.result.forEach((item: any) => {
+            const planName = item.subscriptionName || 'No Plan';
+            planCounts[planName] = (planCounts[planName] || 0) + 1;
+          });
+          const subData = Object.entries(planCounts).map(([name, value]) => ({
+            name,
+            value,
+            color: PLAN_COLORS[name] || PLAN_COLORS['No Plan']
+          }));
+          setSubscriptionData(subData);
+        } else {
+          setRecentEarnings([]);
+          setSubscriptionData([]);
+        }
+      } catch (err: any) {
+        setError(err?.message || 'Failed to fetch data');
+        setAccountValues(null);
+        setRecentEarnings([]);
+        setSubscriptionData([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
   }, []);
 
-  // Calculate stats
-  const totalTechnicians = technicians.length;
-  const totalSubscriptions = technicians.length;
-
-  // Calculate subscription distribution for pie chart
-  const planCounts: Record<string, number> = {};
-  technicians.forEach(tech => {
-    const planName = tech.subscription?.subscriptionName || 'No Plan';
-    planCounts[planName] = (planCounts[planName] || 0) + 1;
-  });
-
-  const subscriptionData = Object.entries(planCounts).map(([name, value]) => ({
-    name,
-    value,
-    color: getColorForPlan(name)
-  }));
-
-  function getColorForPlan(planName: string): string {
-    const colorMap: Record<string, string> = {
-      'Economy Plan': '#10B981',
-      'Gold Plan': '#F59E0B',
-      'Platinum Plan': '#3B82F6',
-      'Basic Plan': '#8B5CF6',
-      'Premium Plan': '#EC4899'
-    };
-    return colorMap[planName] || '#6B7280';
-  }
-
+  // Prepare stats
   const stats = [
     {
       title: 'Total Technicians',
-      value: totalTechnicians,
+      value: accountValues?.totalNoOfTechnicians ?? 0,
       icon: Users,
       color: 'bg-blue-100 text-blue-600',
       iconBg: 'bg-blue-100'
     },
     {
       title: 'Total Subscriptions',
-      value: totalSubscriptions,
+      value: accountValues?.totalNoOfSubscriptions ?? 0,
       icon: CreditCard,
       color: 'bg-green-100 text-green-600',
       iconBg: 'bg-green-100'
     },
     {
       title: 'Total Earnings',
-      value: '₹45,00',
+      value: `₹${accountValues?.totalEarnings?.toLocaleString() ?? 0}`,
       icon: DollarSign,
       color: 'bg-yellow-100 text-yellow-600',
       iconBg: 'bg-yellow-100'
     },
     {
       title: 'Monthly Earnings',
-      value: '₹45,00',
+      value: `₹${accountValues?.totalThisMonthEarnings?.toLocaleString() ?? 0}`,
       icon: DollarSign,
-      color: 'bg-yellow-100 text-yellow-600',
-      iconBg: 'bg-yellow-100'
+      color: 'bg-orange-100 text-orange-600',
+      iconBg: 'bg-orange-100'
     },
   ];
 
-  const monthlyEarnings = [
-    { month: 'Jan', amount: 38000 },
-    { month: 'Feb', amount: 42000 },
-    { month: 'Mar', amount: 39000 },
-    { month: 'Apr', amount: 45000 },
-    { month: 'May', amount: 48000 },
-    { month: 'Jun', amount: 45300 },
-  ];
+  // Prepare monthly earnings for chart
+  const monthLabels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  const monthlyEarnings = (accountValues?.earningsByMonth || []).map((amount, idx) => ({
+    month: monthLabels[idx],
+    amount
+  }));
 
-  const recentActivities = [
-    {
-      id: 1,
-      title: 'AC Repair Completed',
-      customer: 'John Smith',
-      date: '15-07-2025',
-      status: 'completed',
-      icon: Monitor
-    },
-    {
-      id: 2,
-      title: 'Plumbing Service',
-      customer: 'Sarah Johnson',
-      date: '12-07-2025',
-      status: 'completed',
-      icon: Monitor
-    },
-    {
-      id: 3,
-      title: 'New Technician Joined',
-      customer: 'Raj Kumar',
-      date: '10-07-2025',
-      status: 'active',
-      icon: User
-    },
-    {
-      id: 4,
-      title: 'Subscription Renewed',
-      customer: 'Mike Wilson',
-      date: '08-07-2025',
-      status: 'active',
-      icon: CreditCard
-    }
-  ];
+  // Prepare recent activities
+  const recentActivities = recentEarnings.map((item, idx) => ({
+    id: item._id,
+    title: `${item.subscriptionName}`,
+    customer: item.technicianName,
+    date: new Date(item.createdAt).toLocaleDateString('en-GB'),
+    commission: formatCurrency(item.amount),
+    icon: UserCog
+  }));
 
   if (loading) {
     return (
@@ -242,7 +205,7 @@ const Dashboard: React.FC = () => {
                   <div className="flex-1 bg-gray-200 rounded-full h-3 mx-4">
                     <div
                       className="bg-gradient-to-r from-indigo-600 to-teal-500 h-3 rounded-full transition-all duration-300"
-                      style={{ width: `${(item.amount / 50000) * 100}%` }}
+                      style={{ width: `${(item.amount / Math.max(...(accountValues?.earningsByMonth || [1]), 1)) * 100}%` }}
                     ></div>
                   </div>
                   <span className="text-gray-900 font-semibold w-16 text-right">₹{(item.amount / 1000).toFixed(0)}k</span>
@@ -268,27 +231,28 @@ const Dashboard: React.FC = () => {
           </div>
 
           <div className="space-y-4">
-            {recentActivities.map((activity) => {
-              const Icon = activity.icon;
-              return (
-                <div key={activity.id} className="flex items-center space-x-4 p-3 rounded-xl hover:bg-gray-50 transition-colors duration-200">
-                  <div className="p-2 bg-blue-100 rounded-lg">
-                    <Icon className="h-5 w-5 text-blue-600" />
+            {recentActivities.length === 0 ? (
+              <div className="text-center text-gray-500">No recent earnings found.</div>
+            ) : (
+              recentActivities.map((activity) => {
+                const Icon = activity.icon;
+                return (
+                  <div key={activity.id} className="flex items-center space-x-4 p-3 rounded-xl hover:bg-gray-50 transition-colors duration-200">
+                    <div className="p-2 bg-blue-100 rounded-lg">
+                      <Icon className="h-5 w-5 text-blue-600" />
+                    </div>
+                    <div className="flex-1">
+                      <h4 className="text-sm font-medium text-gray-900">{activity.title}</h4>
+                      <p className="text-sm text-gray-500">{activity.customer}</p>
+                      <span className={`inline-block px-2 py-1 text-xs font-medium rounded-full mt-1 text-green-700 bg-green-100`}>
+                        {activity.commission}
+                      </span>
+                    </div>
+                    <p className="text-xs text-gray-400">{activity.date}</p>
                   </div>
-                  <div className="flex-1">
-                    <h4 className="text-sm font-medium text-gray-900">{activity.title}</h4>
-                    <p className="text-sm text-gray-500">{activity.customer}</p>
-                    <span className={`inline-block px-2 py-1 text-xs font-medium rounded-full mt-1 ${activity.status === 'completed'
-                        ? 'text-green-700 bg-green-100'
-                        : 'text-blue-700 bg-blue-100'
-                      }`}>
-                      {activity.status}
-                    </span>
-                  </div>
-                  <p className="text-xs text-gray-400">{activity.date}</p>
-                </div>
-              );
-            })}
+                );
+              })
+            )}
           </div>
         </div>
       </div>
@@ -308,7 +272,7 @@ const Dashboard: React.FC = () => {
           </button>
         </div>
 
-        {technicians.length === 0 ? (
+        {accountValues?.totalNoOfTechnicians === 0 ? (
           <div className="text-center py-6">
             <h3 className="text-lg font-semibold text-gray-900 mb-2">No Technicians Found</h3>
             <p className="text-gray-500">It seems there are no technicians available at the moment.</p>
