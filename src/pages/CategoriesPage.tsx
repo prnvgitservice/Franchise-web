@@ -71,8 +71,8 @@ const [allCategories, setAllCategories] = useState<Category[]>([]);
           return (
             <div
               key={category._id}
-              className="flex flex-col items-center p-6 rounded-lg border border-gray-200 hover:shadow-lg transition-all duration-300 cursor-pointer hover:scale-105 bg-white"
-              onClick={() => navigate(`/technicians/${category._id}`)}
+              className="flex flex-col items-center p-6 rounded-lg border border-gray-200 hover:shadow-lg transition-all duration-300 bg-white"
+              // onClick={() => navigate(`/technicians/${category._id}`)}
             >
               <div
                 className={`w-20 h-20 ${bgColor} rounded-full flex items-center justify-center mb-4 overflow-hidden transition-transform duration-300 hover:scale-110`}
