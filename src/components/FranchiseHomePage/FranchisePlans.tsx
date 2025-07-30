@@ -129,7 +129,7 @@ const FranchisePlans: React.FC = () => {
                 <ul className="space-y-1 mb-6 w-md max-w-md" >
                   {plan.fullFeatures.map((f, idx) => (
                     <li key={idx} className="flex items-center gap-2 text-sm text-gray-500">
-                        <span className='text-red-600 max-w-full rounded-full' />
+                      <span className="me-3 text-red-500 text-3xl">•</span>
                       {f.text}
                     </li>
                   ))}

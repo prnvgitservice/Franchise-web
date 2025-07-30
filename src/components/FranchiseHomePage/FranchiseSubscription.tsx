@@ -118,30 +118,6 @@ const FranchiseSubscription: React.FC = () => {
     return configs[planName] || { icon: Star, color: "gray" };
   };
 
-  // Terms & Conditions data
-  const termsConditions: TermCondition[] = [
-    {
-      icon: DollarSign,
-      text: "Franchise will earn Rs 10% commission on their enrollments and renewals of professionals (service providers/technicians) & advertisement plans as well.",
-    },
-    {
-      icon: DollarSign,
-      text: "The franchise has to pay a monthly subscription fee of Rs. 100 + GST (18%), Rs. 18 = Rs. 118 (valid for 30 days). (It Is Not Refundable.) (Actual amount Rs. 1000 + 18% GST Rs. 180 Total Rs. 1,180).",
-    },
-    {
-      icon: Calendar,
-      text: "The franchise has to renew with Rs. 118 after every 30 days.",
-    },
-    {
-      icon: Book,
-      text: "The franchise must have Marketing as well as organizing knowledge.",
-    },
-    {
-      icon: Clock,
-      text: "This commission will be paid every month. The total commission earned from the 1st to the end of the month will be paid next month between the 5th to 10th by PRNIV Services.",
-    },
-  ];
-
   return (
     <div className="p-4 max-w-6xl mx-auto">
       <div className="flex justify-between items-center mb-8">
@@ -258,6 +234,7 @@ const FranchiseSubscription: React.FC = () => {
                         ))}
                       </div>
                       <div className="space-y-2 mt-3">
+                        <h4 className="text-lg font-semibold">Terms & Conditions</h4>
                         {plan.fullFeatures?.map((details, i) => (
                           <div key={i} className="flex items-center gap-2">
                             <span className="text-sm">
@@ -267,8 +244,7 @@ const FranchiseSubscription: React.FC = () => {
                           </div>
                         ))}
                       </div>
-                      <div className="space-y-4 mt-6">
-                        <h4 className="text-lg font-semibold">Terms & Conditions</h4>
+                      {/* <div className="space-y-4 mt-6">
                         {termsConditions.map((term, index) => (
                           <div key={index} className="flex items-start">
                             <div className="bg-blue-100 p-2 rounded-full mr-3 mt-1">
@@ -280,7 +256,7 @@ const FranchiseSubscription: React.FC = () => {
                             <p className="text-gray-700 text-sm">{term.text}</p>
                           </div>
                         ))}
-                      </div>
+                      </div> */}
                     </div>
                   );
                 })}
