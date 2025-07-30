@@ -76,7 +76,7 @@ const FranchisePlans: React.FC = () => {
           <div
             className="relative bg-gradient-to-br from-pink-500 via-yellow-400 to-purple-600 rounded-3xl shadow-2xl p-1"
           >
-            <div className="absolute -top-7 left-1/2 transform -translate-x-1/2 z-10">
+            <div className="absolute -top-7 left-1/2 transform -translate-x-1/2 h-fit z-10">
               <div className="flex items-center gap-2 bg-gradient-to-r from-yellow-400 to-pink-500 text-white px-2 py-2 rounded-full text-lg font-extrabold shadow-xl border-4 border-white">
                 <Crown className="text-yellow-200 drop-shadow" size={28} />
                 MOST POPULAR

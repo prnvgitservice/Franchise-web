@@ -1,16 +1,26 @@
-import React, { useEffect, useState } from 'react';
-import { Users, DollarSign, Clock, CreditCard, UserCog } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
-import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from 'recharts';
-import { getFranchiseAccount, getFranchiseAccountValues } from '../../api/apiMethods';
+import React, { useEffect, useState } from "react";
+import { Users, DollarSign, Clock, CreditCard, UserCog } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import {
+  PieChart,
+  Pie,
+  Cell,
+  ResponsiveContainer,
+  Tooltip,
+  Legend,
+} from "recharts";
+import {
+  getFranchiseAccount,
+  getFranchiseAccountValues,
+} from "../../api/apiMethods";
 
 const PLAN_COLORS: Record<string, string> = {
-  'Economy Plan': '#10B981',
-  'Gold Plan': '#F59E0B',
-  'Platinum Plan': '#3B82F6',
-  'Basic Plan': '#8B5CF6',
-  'Premium Plan': '#EC4899',
-  'No Plan': '#6B7280'
+  "Economy Plan": "#10B981",
+  "Gold Plan": "#F59E0B",
+  "Platinum Plan": "#3B82F6",
+  "Basic Plan": "#8B5CF6",
+  "Premium Plan": "#EC4899",
+  "No Plan": "#6B7280",
 };
 
 const Dashboard: React.FC = () => {
@@ -24,27 +34,29 @@ const Dashboard: React.FC = () => {
     totalNoOfSubscriptions: number;
   }>(null);
   const [recentEarnings, setRecentEarnings] = useState<any[]>([]);
-  const [subscriptionData, setSubscriptionData] = useState<{ name: string; value: number; color: string }[]>([]);
-  const [error, setError] = useState('');
+  const [subscriptionData, setSubscriptionData] = useState<
+    { name: string; value: number; color: string }[]
+  >([]);
+  const [error, setError] = useState("");
 
   const today = new Date();
-  const dateString = today.toLocaleDateString('en-US', {
-    weekday: 'long',
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric'
+  const dateString = today.toLocaleDateString("en-US", {
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+    year: "numeric",
   });
 
-   // Format currency
-   const formatCurrency = (amount: number) =>
-    `₹${amount.toLocaleString('en-IN', { maximumFractionDigits: 0 })}`;
+  // Format currency
+  const formatCurrency = (amount: number) =>
+    `₹${amount.toLocaleString("en-IN", { maximumFractionDigits: 0 })}`;
 
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
-      setError('');
+      setError("");
       try {
-        const franchiseId = localStorage.getItem('userId') || '';
+        const franchiseId = localStorage.getItem("userId") || "";
         // Fetch account values
         const valuesRes = await getFranchiseAccountValues(franchiseId);
         if (valuesRes?.success && valuesRes?.result) {
@@ -61,13 +73,13 @@ const Dashboard: React.FC = () => {
           // Calculate subscription distribution for pie chart
           const planCounts: Record<string, number> = {};
           earningsRes?.result.forEach((item: any) => {
-            const planName = item.subscriptionName || 'No Plan';
+            const planName = item.subscriptionName || "No Plan";
             planCounts[planName] = (planCounts[planName] || 0) + 1;
           });
           const subData = Object.entries(planCounts).map(([name, value]) => ({
             name,
             value,
-            color: PLAN_COLORS[name] || PLAN_COLORS['No Plan']
+            color: PLAN_COLORS[name] || PLAN_COLORS["No Plan"],
           }));
           setSubscriptionData(subData);
         } else {
@@ -75,7 +87,7 @@ const Dashboard: React.FC = () => {
           setSubscriptionData([]);
         }
       } catch (err: any) {
-        setError(err?.message || 'Failed to fetch data');
+        setError(err?.message || "Failed to fetch data");
         setAccountValues(null);
         setRecentEarnings([]);
         setSubscriptionData([]);
@@ -89,50 +101,65 @@ const Dashboard: React.FC = () => {
   // Prepare stats
   const stats = [
     {
-      title: 'Total Technicians',
+      title: "Total Technicians",
       value: accountValues?.totalNoOfTechnicians ?? 0,
       icon: Users,
-      color: 'bg-blue-100 text-blue-600',
-      iconBg: 'bg-blue-100'
+      color: "bg-blue-100 text-blue-600",
+      iconBg: "bg-blue-100",
     },
     {
-      title: 'Total Subscriptions',
+      title: "Total Subscriptions",
       value: accountValues?.totalNoOfSubscriptions ?? 0,
       icon: CreditCard,
-      color: 'bg-green-100 text-green-600',
-      iconBg: 'bg-green-100'
+      color: "bg-green-100 text-green-600",
+      iconBg: "bg-green-100",
     },
     {
-      title: 'Total Earnings',
+      title: "Total Earnings",
       value: `₹${accountValues?.totalEarnings?.toLocaleString() ?? 0}`,
       icon: DollarSign,
-      color: 'bg-yellow-100 text-yellow-600',
-      iconBg: 'bg-yellow-100'
+      color: "bg-yellow-100 text-yellow-600",
+      iconBg: "bg-yellow-100",
     },
     {
-      title: 'Monthly Earnings',
+      title: "Monthly Earnings",
       value: `₹${accountValues?.totalThisMonthEarnings?.toLocaleString() ?? 0}`,
       icon: DollarSign,
-      color: 'bg-orange-100 text-orange-600',
-      iconBg: 'bg-orange-100'
+      color: "bg-orange-100 text-orange-600",
+      iconBg: "bg-orange-100",
     },
   ];
 
   // Prepare monthly earnings for chart
-  const monthLabels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-  const monthlyEarnings = (accountValues?.earningsByMonth || []).map((amount, idx) => ({
-    month: monthLabels[idx],
-    amount
-  }));
+  const monthLabels = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
+  const monthlyEarnings = (accountValues?.earningsByMonth || []).map(
+    (amount, idx) => ({
+      month: monthLabels[idx],
+      amount,
+    })
+  );
 
   // Prepare recent activities
   const recentActivities = recentEarnings.map((item, idx) => ({
     id: item._id,
     title: `${item.subscriptionName}`,
     customer: item.technicianName,
-    date: new Date(item.createdAt).toLocaleDateString('en-GB'),
+    date: new Date(item.createdAt).toLocaleDateString("en-GB"),
     commission: formatCurrency(item.amount),
-    icon: UserCog
+    icon: UserCog,
   }));
 
   if (loading) {
@@ -174,11 +201,15 @@ const Dashboard: React.FC = () => {
             >
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600 mb-1">{stat.title}</p>
-                  <p className="text-2xl font-bold text-gray-900">{stat.value}</p>
+                  <p className="text-sm font-medium text-gray-600 mb-1">
+                    {stat.title}
+                  </p>
+                  <p className="text-2xl font-bold text-gray-900">
+                    {stat.value}
+                  </p>
                 </div>
                 <div className={`p-3 rounded-xl ${stat.iconBg}`}>
-                  <Icon className={`h-6 w-6 ${stat.color.split(' ')[1]}`} />
+                  <Icon className={`h-6 w-6 ${stat.color.split(" ")[1]}`} />
                 </div>
               </div>
             </div>
@@ -193,22 +224,37 @@ const Dashboard: React.FC = () => {
               <div className="p-2 bg-blue-100 rounded-lg mr-3">
                 <DollarSign className="h-5 w-5 text-blue-600" />
               </div>
-              <h3 className="text-lg font-semibold text-gray-900">Monthly Earnings</h3>
+              <h3 className="text-lg font-semibold text-gray-900">
+                Monthly Earnings
+              </h3>
             </div>
           </div>
 
           <div className="space-y-4">
             {monthlyEarnings.map((item, index) => (
               <div key={index} className="flex items-center justify-between">
-                <span className="text-gray-700 font-medium w-12">{item.month}</span>
+                <span className="text-gray-700 font-medium w-12">
+                  {item.month}
+                </span>
                 <div className="flex items-center space-x-4 flex-1">
                   <div className="flex-1 bg-gray-200 rounded-full h-3 mx-4">
                     <div
                       className="bg-gradient-to-r from-indigo-600 to-teal-500 h-3 rounded-full transition-all duration-300"
-                      style={{ width: `${(item.amount / Math.max(...(accountValues?.earningsByMonth || [1]), 1)) * 100}%` }}
+                      style={{
+                        width: `${
+                          (item.amount /
+                            Math.max(
+                              ...(accountValues?.earningsByMonth || [1]),
+                              1
+                            )) *
+                          100
+                        }%`,
+                      }}
                     ></div>
                   </div>
-                  <span className="text-gray-900 font-semibold w-16 text-right">₹{(item.amount / 1000).toFixed(0)}k</span>
+                  <span className="text-gray-900 font-semibold w-16 text-right">
+                    ₹{(item.amount / 1000).toFixed(0)}k
+                  </span>
                 </div>
               </div>
             ))}
@@ -221,10 +267,13 @@ const Dashboard: React.FC = () => {
               <div className="p-2 bg-green-100 rounded-lg mr-3">
                 <Clock className="h-5 w-5 text-green-600" />
               </div>
-              <h3 className="text-lg font-semibold text-gray-900">Recent Earnings</h3>
+              <h3 className="text-lg font-semibold text-gray-900">
+                Recent Earnings
+              </h3>
             </div>
-            <button className="text-blue-600 text-sm font-medium hover:text-blue-700 transition-colors duration-200 cursor-pointer"
-              onClick={() => navigate('/earnings')}
+            <button
+              className="text-blue-600 text-sm font-medium hover:text-blue-700 transition-colors duration-200 cursor-pointer"
+              onClick={() => navigate("/earnings")}
             >
               View All
             </button>
@@ -232,19 +281,30 @@ const Dashboard: React.FC = () => {
 
           <div className="space-y-4">
             {recentActivities.length === 0 ? (
-              <div className="text-center text-gray-500">No recent earnings found.</div>
+              <div className="text-center text-gray-500">
+                No recent earnings found.
+              </div>
             ) : (
               recentActivities.map((activity) => {
                 const Icon = activity.icon;
                 return (
-                  <div key={activity.id} className="flex items-center space-x-4 p-3 rounded-xl hover:bg-gray-50 transition-colors duration-200">
+                  <div
+                    key={activity.id}
+                    className="flex items-center space-x-4 p-3 rounded-xl hover:bg-gray-50 transition-colors duration-200"
+                  >
                     <div className="p-2 bg-blue-100 rounded-lg">
                       <Icon className="h-5 w-5 text-blue-600" />
                     </div>
                     <div className="flex-1">
-                      <h4 className="text-sm font-medium text-gray-900">{activity.title}</h4>
-                      <p className="text-sm text-gray-500">{activity.customer}</p>
-                      <span className={`inline-block px-2 py-1 text-xs font-medium rounded-full mt-1 text-green-700 bg-green-100`}>
+                      <h4 className="text-sm font-medium text-gray-900">
+                        {activity.title}
+                      </h4>
+                      <p className="text-sm text-gray-500">
+                        {activity.customer}
+                      </p>
+                      <span
+                        className={`inline-block px-2 py-1 text-xs font-medium rounded-full mt-1 text-green-700 bg-green-100`}
+                      >
                         {activity.commission}
                       </span>
                     </div>
@@ -258,6 +318,108 @@ const Dashboard: React.FC = () => {
       </div>
 
       <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+        <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center">
+            <div className="p-2 bg-purple-100 rounded-lg mr-3">
+              <CreditCard className="h-5 w-5 text-purple-600" />
+            </div>
+            <h3 className="text-lg font-semibold text-gray-900">
+              Subscription Plans
+            </h3>
+          </div>
+          <button
+            className="text-blue-600 text-sm font-medium hover:text-blue-700 transition-colors duration-200 cursor-pointer"
+            onClick={() => navigate("/technicians")}
+          >
+            View Details
+          </button>
+        </div>
+
+        {subscriptionData.length === 0 ? (
+          <div className="text-center py-6">
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">
+              No Technicians Found
+            </h3>
+            <p className="text-gray-500">
+              It seems there are no technicians associated with any subscription
+              plans.
+            </p>
+            <button
+              className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200"
+              onClick={() => navigate("/technicians")}
+            >
+              Create New Technicians
+            </button>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div className="h-[300px]">
+              <ResponsiveContainer width="100%" height="100%">
+                <PieChart>
+                  <Pie
+                    data={subscriptionData}
+                    cx="50%"
+                    cy="50%"
+                    innerRadius={60}
+                    outerRadius={100}
+                    paddingAngle={5}
+                    dataKey="value"
+                    label={({ name, percent }) =>
+                      `${name}: ${(percent * 100).toFixed(0)}%`
+                    }
+                  >
+                    {subscriptionData.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={entry.color} />
+                    ))}
+                  </Pie>
+                  <Tooltip
+                    formatter={(value) => [`${value}`, "Technicians"]}
+                    contentStyle={{
+                      backgroundColor: "rgba(255, 255, 255, 0.95)",
+                      border: "none",
+                      borderRadius: "12px",
+                      boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.1)",
+                    }}
+                  />
+                  <Legend />
+                </PieChart>
+              </ResponsiveContainer>
+            </div>
+
+            <div className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {subscriptionData.map((item, index) => (
+                  <div
+                    key={index}
+                    className="flex flex-col p-4 rounded-lg border border-gray-200 hover:shadow-md transition-all duration-200"
+                    style={{ backgroundColor: `${item.color}10` }}
+                  >
+                    <div className="flex items-center mb-2">
+                      <div
+                        className="w-3 h-3 rounded-full mr-3"
+                        style={{ backgroundColor: item.color }}
+                      ></div>
+                      <h4 className="text-md font-semibold text-gray-900">
+                        {item.name}
+                      </h4>
+                    </div>
+                    <div className="flex items-end justify-between mt-2">
+                      <p
+                        className="text-2xl font-bold"
+                        style={{ color: item.color }}
+                      >
+                        {item.value}
+                      </p>
+                      <div className="text-sm text-gray-500">technicians</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+      {/* <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center">
             <div className="p-2 bg-purple-100 rounded-lg mr-3">
@@ -338,7 +500,7 @@ const Dashboard: React.FC = () => {
             </div>
           </div>
         )}
-      </div>
+      </div> */}
     </div>
   );
 };
@@ -474,7 +636,6 @@ export default Dashboard;
 //       iconBg: 'bg-yellow-100'
 //     },
 
-    
 //   ];
 
 //   const monthlyEarnings = [
@@ -647,7 +808,7 @@ export default Dashboard;
 //             View Details
 //           </button>
 //         </div>
-        
+
 //         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
 //           <div className="h-[300px]">
 //             <ResponsiveContainer width="100%" height="100%">
@@ -666,25 +827,25 @@ export default Dashboard;
 //                     <Cell key={`cell-${index}`} fill={entry.color} />
 //                   ))}
 //                 </Pie>
-//                 <Tooltip 
+//                 <Tooltip
 //                   formatter={(value) => [`${value}`, 'Technicians']}
-//                   contentStyle={{ 
-//                     backgroundColor: 'rgba(255, 255, 255, 0.95)', 
-//                     border: 'none', 
+//                   contentStyle={{
+//                     backgroundColor: 'rgba(255, 255, 255, 0.95)',
+//                     border: 'none',
 //                     borderRadius: '12px',
 //                     boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)'
-//                   }} 
+//                   }}
 //                 />
 //                 <Legend />
 //               </PieChart>
 //             </ResponsiveContainer>
 //           </div>
-          
+
 //           <div className="space-y-4">
 //             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
 //               {subscriptionData.map((item, index) => (
-//                 <div 
-//                   key={index} 
+//                 <div
+//                   key={index}
 //                   className="flex flex-col p-4 rounded-lg border border-gray-200 hover:shadow-md transition-all duration-200"
 //                   style={{ backgroundColor: `${item.color}10` }}
 //                 >
@@ -852,7 +1013,6 @@ export default Dashboard;
 //     planCounts[planName] = (planCounts[planName] || 0) + 1;
 //   });
 
-  
 //   const getColorForPlan = (planName: string): string => {
 //     const colorMap: Record<string, string> = {
 //       'Economy Plan': '#10B981',
@@ -864,7 +1024,7 @@ export default Dashboard;
 //     };
 //     return colorMap[planName] || '#6B7280';
 //   };
-  
+
 //   const subscriptionData: SubscriptionData[] = Object.entries(planCounts).map(([name, value]) => ({
 //     name,
 //     value,
@@ -1487,7 +1647,7 @@ export default Dashboard;
 //             </div>
 //             <h3 className="text-lg font-semibold text-gray-900">Subscription Plans</h3>
 //           </div>
-//           <button 
+//           <button
 //           className="text-blue-600 text-sm font-medium hover:text-blue-700 transition-colors duration-200 cursor-pointer"
 //             onClick={() => navigate('/technicians')}
 //           >
@@ -1512,7 +1672,7 @@ export default Dashboard;
 //               {subscriptionData.map((item, index) => {
 //                 let gradientClass = "";
 //                 let textColor = "text-gray-900";
-                
+
 //                 // Apply different gradients based on plan name
 //                 if (item.name === "Economy Plan") {
 //                   gradientClass = "bg-gradient-to-br from-blue-400 to-blue-500";
@@ -1532,10 +1692,10 @@ export default Dashboard;
 //                 } else {
 //                   gradientClass = "bg-gray-50";
 //                 }
-                
+
 //                 return (
-//                   <div 
-//                     key={index} 
+//                   <div
+//                     key={index}
 //                     className={`flex flex-col p-4 rounded-lg shadow-md transition-all duration-200 hover:shadow-lg hover:scale-[1.03] min-h-[100px] ${gradientClass}`}
 //                   >
 //                     <div className="flex items-center mb-2">
@@ -1549,7 +1709,7 @@ export default Dashboard;
 //                   </div>
 //                 );
 //               })}
-//             </div>  
+//             </div>
 //             </div>
 //         )}
 //       </div>
