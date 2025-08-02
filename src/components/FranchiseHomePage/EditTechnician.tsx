@@ -601,7 +601,9 @@ const EditTechnician: React.FC = () => {
                     name="subscriptionId"
                     type="text"
                     value={
-                      subscriptionPlans.find(
+                      subscriptionPlans
+          // .filter(plan => plan.name === "Economy Plan")
+                      .find(
                         (plan) => plan._id === formData.subscriptionId
                       )?.name || technician.subscription.subscriptionName
                     }
