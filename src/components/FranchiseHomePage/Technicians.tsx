@@ -110,14 +110,14 @@ const Technicians: React.FC = () => {
           <h1 className="text-2xl font-bold text-gray-900">Technicians Management</h1>
           <p className="text-gray-600 mt-1">Manage and monitor all technicians in your network</p>
         </div>
-        <button
+        {/* <button
           className="mt-4 sm:mt-0 bg-gradient-to-r from-indigo-600 to-teal-500 text-white px-4 py-2 rounded-xl hover:from-indigo-700 hover:to-teal-600 transition-all duration-200 flex items-center"
           onClick={() => navigate('/addTechnician')}
           aria-label="Add new technician"
         >
           <Plus className="h-4 w-4 mr-2" />
           Add Technician
-        </button>
+        </button> */}
       </div>
 
       {/* Error Message */}

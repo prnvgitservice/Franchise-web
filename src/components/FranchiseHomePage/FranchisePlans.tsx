@@ -138,7 +138,8 @@ const FranchisePlans: React.FC = () => {
 
               <div className="w-md flex flex-col gap-4 mt-4">
                 <button
-                  onClick={() => navigate('/buyPlan', { state: { plan } })}
+                  onClick={() => alert("Please contact Prnv Admin.")}
+                  // onClick={() => navigate('/buyPlan', { state: { plan } })}
                   className="w-md mx-auto py-4 px-2 rounded-2xl font-bold text-lg transition duration-300 text-white shadow-lg bg-gradient-to-r from-pink-600 via-yellow-500 to-purple-600 hover:from-pink-700 hover:to-purple-700 hover:scale-105"
                 >
                   Buy Now

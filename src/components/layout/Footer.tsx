@@ -12,14 +12,18 @@ function Footer() {
               <p className="text-gray-600">Contact our customer support</p>
             </div>
             <div className="flex space-x-4">
-              <button className="flex items-center space-x-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+              {/* <button className="flex items-center space-x-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
                 <Phone className="w-4 h-4" />
                 <span>Call</span>
+              </button> */}
+                <button className="flex items-center space-x-2 bg-green-600 text-white px-4 py-2 rounded-lg transition-colors">
+                <Phone className="w-4 h-4" />
+                <span>9603558369</span>
               </button>
-              <button className="flex items-center space-x-2 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors">
+              {/* <button className="flex items-center space-x-2 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors">
                 <MessageCircle className="w-4 h-4" />
                 <span>WhatsApp</span>
-              </button>
+              </button> */}
             </div>
           </div>
         </div>
