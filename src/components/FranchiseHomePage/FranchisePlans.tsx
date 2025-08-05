@@ -58,12 +58,12 @@ const FranchisePlans: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-yellow-50 via-pink-50 to-purple-100 py-10 flex items-center justify-center">
-      <div className="w-full max-w-2xl mx-auto px-4">
+      <div className="w-full max-w-xl mx-auto px-4">
         <div className="text-center mb-12">
-          <h1 className="text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-pink-600 via-yellow-500 to-purple-600 drop-shadow-lg">
+          <h1 className="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-pink-600 via-yellow-500 to-purple-600 drop-shadow-lg">
             The Ultimate Franchise Plan
           </h1>
-          <p className="text-lg text-gray-700 max-w-2xl mx-auto mt-4 leading-relaxed">
+          <p className="ext-lg text-gray-600 max-w-5xl mx-auto mt-3 leading-relaxed">
             Unlock every premium feature and grow your franchise business with our all-in-one, most popular plan.
           </p>
         </div>
@@ -126,7 +126,7 @@ const FranchisePlans: React.FC = () => {
               </ul>
 
               {Array.isArray(plan.fullFeatures) && plan.fullFeatures.length > 0 && (
-                <ul className="space-y-1 mb-6 w-md max-w-md" >
+                <ul className="space-y-1 mb-4 w-md max-w-md" >
                   {plan.fullFeatures.map((f, idx) => (
                     <li key={idx} className="flex items-center gap-2 text-sm text-gray-500">
                       <span className="me-3 text-red-500 text-3xl">•</span>
@@ -140,7 +140,7 @@ const FranchisePlans: React.FC = () => {
                 <button
                   onClick={() => alert("Please contact Prnv Admin (call: 9603558369).")}
                   // onClick={() => navigate('/buyPlan', { state: { plan } })}
-                  className="w-md mx-auto py-4 px-2 rounded-2xl font-bold text-lg transition duration-300 text-white shadow-lg bg-gradient-to-r from-pink-600 via-yellow-500 to-purple-600 hover:from-pink-700 hover:to-purple-700 hover:scale-105"
+                  className="w-md mx-auto py-3 px-2 rounded-2xl font-bold text-lg transition duration-300 text-white shadow-lg bg-gradient-to-r from-pink-600 via-yellow-500 to-purple-600 hover:from-pink-700 hover:to-purple-700 hover:scale-105"
                 >
                   Buy Now
                 </button>
