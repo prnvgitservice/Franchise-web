@@ -40,7 +40,7 @@ const Technicians: React.FC = () => {
   const navigate = useNavigate();
 
   // Static list of subscription plans
-  const subscriptionPlans = ['all', 'Economy Plan', 'Gold Plan', 'Platinum Plan'];
+  const subscriptionPlans = ['all', 'Economy Plan'];
 
   const fetchTechsByFranchise = async () => {
     try {
