@@ -60,7 +60,7 @@ const FranchisePlans: React.FC = () => {
     <div className="min-h-screen bg-gradient-to-br from-yellow-50 via-pink-50 to-purple-100 py-10 flex items-center justify-center">
       <div className="w-full max-w-xl mx-auto px-4">
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-pink-600 via-yellow-500 to-purple-600 drop-shadow-lg">
+          <h1 className="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-pink-600 via-yellow-500 to-purple-600 drop-shadow-lg ">
             The Ultimate Franchise Plan
           </h1>
           <p className="ext-lg text-gray-600 max-w-5xl mx-auto mt-3 leading-relaxed">
@@ -112,7 +112,7 @@ const FranchisePlans: React.FC = () => {
                 Valid for {plan.validity} days
               </div>
 
-              <ul className="space-y-3 my-8 w-md max-w-md">
+              <ul className="space-y-2 my-4 w-md max-w-md">
                 {Array.isArray(plan.features) && plan.features.map((feature, idx) => (
                   <li key={idx} className="flex items-center gap-3 text-lg text-gray-800 font-medium">
                     {feature.included ? (
@@ -127,7 +127,7 @@ const FranchisePlans: React.FC = () => {
 
               {Array.isArray(plan.fullFeatures) && plan.fullFeatures.length > 0 && (
                 <ul className="space-y-1 mb-4 w-md max-w-md" >
-                  {plan.fullFeatures.map((f, idx) => (
+                  {plan.fullFeatures.slice(0,5).map((f, idx) => (
                     <li key={idx} className="flex items-center gap-2 text-sm text-gray-500">
                       <span className="me-3 text-red-500 text-3xl">•</span>
                       {f.text}
