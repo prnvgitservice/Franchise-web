@@ -95,7 +95,7 @@ const [allCategories, setAllCategories] = useState<Category[]>([]);
       </div>
       <div className='mt-7'>
        <h2 className="text-xl font-bold text-gray-900 mb-4 text-left">
-        Upcoming Categories
+        Other Categories
       </h2>
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {allCategories.filter(category => category?.status === 0).map((category, index) => {
