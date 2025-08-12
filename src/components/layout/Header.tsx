@@ -113,12 +113,12 @@ function Header() {
                     Hi, {user?.username || 'Franchise'}
                   </button>
                 </div>
-                <button
+                {/* <button
                   onClick={() => setShowReviewModal(true)}
                   className="text-gray-700 hover:text-yellow-600 cursor-pointer"
                 >
                   <Star className="w-4 h-4 text-yellow-400 fill-current" />
-                </button>
+                </button> */}
                 <button
                   onClick={handleLogout}
                   className="text-gray-700 hover:text-red-800 cursor-pointer"

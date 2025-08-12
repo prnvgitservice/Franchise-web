@@ -55,6 +55,7 @@ const TechnicianView: React.FC = () => {
           <h3 className="text-xl font-semibold text-gray-700 mb-3 pb-2 border-b">Personal Information</h3>
           <div className="space-y-3">
             <p><span className="font-medium text-gray-600">Technician Name:</span> {technician.username}</p>
+            <p><span className="font-medium text-gray-600">Technician Id:</span> {technician.userId}</p>
             <p><span className="font-medium text-gray-600">Phone Number:</span> {technician.phoneNumber}</p>
             {/* <p><span className="font-medium text-gray-600">Role:</span> {technician.role}</p> */}
             <p><span className="font-medium text-gray-600">Category:</span> {technician.category}</p>

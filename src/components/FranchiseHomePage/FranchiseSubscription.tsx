@@ -233,7 +233,7 @@ const FranchiseSubscription: React.FC = () => {
                           </div>
                         ))}
                       </div>
-                      <div className="space-y-2 mt-3">
+                      <div className="space-y-1 mt-4">
                         <h4 className="text-lg font-semibold">Terms & Conditions</h4>
                         {plan.fullFeatures?.map((details, i) => (
                           <div key={i} className="flex items-center gap-2">

@@ -166,6 +166,7 @@ const Technicians: React.FC = () => {
             <thead className="bg-gray-50 border-b border-gray-200">
               <tr>
                 <th className="text-left py-4 px-6 font-semibold text-gray-700">Technician</th>
+                <th className="text-left py-4 px-6 font-semibold text-gray-700">Technician Id</th>
                 <th className="text-left py-4 px-6 font-semibold text-gray-700">Mobile</th>
                 <th className="text-left py-4 px-6 font-semibold text-gray-700">Category</th>
                 <th className="text-left py-4 px-6 font-semibold text-gray-700">Address</th>
@@ -201,6 +202,11 @@ const Technicians: React.FC = () => {
                         <div>
                           <h4 className="font-semibold text-gray-900 whitespace-nowrap">{tech.username}</h4>
                         </div>
+                      </div>
+                    </td>
+                    <td className="py-4 px-6">
+                      <div className="flex items-center text-sm text-gray-700 whitespace-nowrap">
+                        {tech.userId}
                       </div>
                     </td>
                     <td className="py-4 px-6">

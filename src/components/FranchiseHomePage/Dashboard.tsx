@@ -179,7 +179,7 @@ const Dashboard: React.FC = () => {
               Welcome back, Franchise
             </h1>
             <p className="text-blue-100 text-lg">
-              Here's your performance overview for today
+              Here's your performance overview
             </p>
           </div>
           <div className="bg-white/20 backdrop-blur-sm rounded-xl p-4 border border-white/30">
