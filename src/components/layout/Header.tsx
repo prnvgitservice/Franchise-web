@@ -52,6 +52,7 @@ function Header() {
   const handleLogout = () => {
     localStorage.clear();
     setUser(null);
+    alert('Are Sure You Want to Logout?');
     navigate('/login/franchise');
   };
 

@@ -189,7 +189,9 @@ const FranchiseSignupForm: React.FC = () => {
                   className="mt-1 w-full border border-gray-300 rounded-md p-2"
                 >
                   <option value="">Select Pincode</option>
-                  {pincodeData.map((p) => (
+                  {pincodeData
+                  .sort((a, b) => Number(a.code) - Number(b.code))
+                  .map((p) => (
                     <option key={p._id} value={p.code}>
                       {p.code}
                     </option>

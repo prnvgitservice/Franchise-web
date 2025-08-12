@@ -66,7 +66,10 @@ const [allCategories, setAllCategories] = useState<Category[]>([]);
         Most Popular Categories
       </h2>
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        {allCategories.filter(category => category?.status === 1).map((category, index) => {
+        {allCategories
+        .filter(category => category?.status === 1)
+        .sort((a, b) => a.category_name.toLowerCase().localeCompare(b.category_name.toLowerCase()))
+        .map((category, index) => {
           const bgColor = getRandomBgColor();
           return (
             <div
@@ -98,7 +101,9 @@ const [allCategories, setAllCategories] = useState<Category[]>([]);
         Upcoming Categories
       </h2>
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        {allCategories.filter(category => category?.status === 0).map((category, index) => {
+        {allCategories.filter(category => category?.status === 0)
+        .sort((a, b) => a.category_name.toLowerCase().localeCompare(b.category_name.toLowerCase()))
+        .map((category, index) => {
           const bgColor = getRandomBgColor();
           return (
             <div

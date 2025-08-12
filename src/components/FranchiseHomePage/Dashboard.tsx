@@ -285,33 +285,34 @@ const Dashboard: React.FC = () => {
                 No recent earnings found.
               </div>
             ) : (
-              recentActivities.map((activity) => {
-                const Icon = activity.icon;
-                return (
-                  <div
-                    key={activity.id}
-                    className="flex items-center space-x-4 p-3 rounded-xl hover:bg-gray-50 transition-colors duration-200"
-                  >
-                    <div className="p-2 bg-blue-100 rounded-lg">
-                      <Icon className="h-5 w-5 text-blue-600" />
+              recentActivities
+                .sort((a, b) => new Date(b.date) - new Date(a.date)) // Sort by date, newest first
+                .slice(0, 5) // Take only the first 5
+                .map((activity) => {
+                  const Icon = activity.icon;
+                  return (
+                    <div
+                      key={activity.id}
+                      className="flex items-center space-x-4 p-3 rounded-xl hover:bg-gray-50 transition-colors duration-200"
+                    >
+                      <div className="p-2 bg-blue-100 rounded-lg">
+                        <Icon className="h-5 w-5 text-blue-600" />
+                      </div>
+                      <div className="flex-1">
+                        <h4 className="text-sm font-medium text-gray-900">
+                          {activity.title}
+                        </h4>
+                        <p className="text-sm text-gray-500">
+                          {activity.customer}
+                        </p>
+                        <span className="inline-block px-2 py-1 text-xs font-medium rounded-full mt-1 text-green-700 bg-green-100">
+                          {activity.commission}
+                        </span>
+                      </div>
+                      <p className="text-xs text-gray-400">{activity.date}</p>
                     </div>
-                    <div className="flex-1">
-                      <h4 className="text-sm font-medium text-gray-900">
-                        {activity.title}
-                      </h4>
-                      <p className="text-sm text-gray-500">
-                        {activity.customer}
-                      </p>
-                      <span
-                        className={`inline-block px-2 py-1 text-xs font-medium rounded-full mt-1 text-green-700 bg-green-100`}
-                      >
-                        {activity.commission}
-                      </span>
-                    </div>
-                    <p className="text-xs text-gray-400">{activity.date}</p>
-                  </div>
-                );
-              })
+                  );
+                })
             )}
           </div>
         </div>
