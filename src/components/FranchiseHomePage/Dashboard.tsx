@@ -68,6 +68,7 @@ const Dashboard: React.FC = () => {
       setError("");
       try {
         const franchiseId = localStorage.getItem("userId") || "";
+        console.log("Franchise ID:", franchiseId);
         const valuesRes = await getFranchiseAccountValues(franchiseId);
         if (valuesRes?.success && valuesRes?.result) {
           setAccountValues(valuesRes.result);

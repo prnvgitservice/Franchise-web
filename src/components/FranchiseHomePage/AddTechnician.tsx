@@ -360,7 +360,7 @@ me
                 >
                   <option value="" disabled>Select Subscription Plan</option>
                   {subscriptionPlans
-                    .filter((plan) => plan.name === 'Economy Plan')
+                    .filter((plan) => ['Economy Plan', 'Free Plan'].includes(plan.name))
                     .map((plan) => (
                       <option key={plan._id} value={plan._id}>
                         {plan.name} - ₹{plan.finalPrice} ({plan.price} + {plan.gst} GST)

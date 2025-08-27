@@ -204,9 +204,6 @@ const FranchiseLoginForm: React.FC = () => {
         >
           +91 96035583369
         </a>
-      {/* <a href="/signup/franchise" className="text-blue-600 hover:underline font-medium ms-1">
-        Sign Up
-      </a> */}
       </p>
 
     </main>
@@ -214,6 +211,9 @@ const FranchiseLoginForm: React.FC = () => {
 };
 
 export default FranchiseLoginForm;
+{/* <a href="/signup/franchise" className="text-blue-600 hover:underline font-medium ms-1">
+  Sign Up
+</a> */}
 // import React, { useState } from 'react';
 // import { useNavigate } from 'react-router-dom';
 // import { franchiseLogin } from '../../api/apiMethods'; // Ensure this is implemented
