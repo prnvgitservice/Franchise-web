@@ -1,12 +1,12 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { Download, Menu, X,Star } from 'lucide-react';
-import { TbLogout } from 'react-icons/tb';
-import CompanyReviewModel from '../services/CompanyReviewModel';
+import React, { useEffect, useRef, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { Download, Menu, X, Star } from "lucide-react";
+import { TbLogout } from "react-icons/tb";
+import CompanyReviewModel from "../services/CompanyReviewModel";
 
 interface User {
   username: string;
-  role: 'franchise';
+  role: "franchise";
 }
 
 function Header() {
@@ -19,48 +19,53 @@ function Header() {
 
   useEffect(() => {
     const updateUser = () => {
-      const storedUser = localStorage.getItem('user');
-      const parsedUser: User | null = storedUser ? JSON.parse(storedUser) : null;
-      if (parsedUser?.role === 'franchise') {
+      const storedUser = localStorage.getItem("user");
+      const parsedUser: User | null = storedUser
+        ? JSON.parse(storedUser)
+        : null;
+      if (parsedUser?.role === "franchise") {
         setUser(parsedUser);
       } else {
         setUser(null);
       }
     };
 
-    window.addEventListener('userChanged', updateUser);
+    window.addEventListener("userChanged", updateUser);
     updateUser();
 
     return () => {
-      window.removeEventListener('userChanged', updateUser);
+      window.removeEventListener("userChanged", updateUser);
     };
   }, []);
 
   const handleClickOutside = (event: MouseEvent) => {
-    if (reviewModalRef.current && !reviewModalRef.current.contains(event.target as Node)) {
+    if (
+      reviewModalRef.current &&
+      !reviewModalRef.current.contains(event.target as Node)
+    ) {
       setShowReviewModal(false);
     }
   };
 
   useEffect(() => {
-    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
 
   const handleLogout = () => {
     localStorage.clear();
     setUser(null);
-    alert('Are Sure You Want to Logout?');
-    navigate('/login/franchise');
+    alert("Are Sure You Want to Logout?");
+    navigate("/login/franchise");
   };
 
   const handleLogoClick = () => {
-    if (user?.role === 'franchise') {
-      navigate('/');
+    if (user?.role === "franchise") {
+      navigate("/");
     } else {
-      navigate('/');
+      navigate("/");
     }
   };
 
@@ -68,12 +73,12 @@ function Header() {
     <header className="bg-white shadow-sm border-b z-10 relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
-          <div className="flex-shrink-0 bg-blue-900 rounded px-1 py-1 ">
+          <div className=" flex items-center rounded p-1">
             <button onClick={handleLogoClick}>
               <img
-                src="https://prnvservices.com/uploads/logo/1695377568_logo-white.png"
-                alt="Justdial Logo"
-                className="h-8 w-auto cursor-pointer"
+                src="https://old.prnvservices.com/uploads/logo/prnv_logo.png"
+                alt="Prnv Logo"
+                className="h-12 w-auto rounded-md"
               />
             </button>
           </div>
@@ -82,13 +87,15 @@ function Header() {
             <div className="flex items-center w-16">
               <div id="google_translate_element" className="w-full" />
             </div>
-            {([
-              ['categories', 'Categories'],
-              ['about', 'About Us'],
-              ['subscription', 'Subscriptions'],
-              ['features', 'Key Features'],
-              // ['franchise', 'Franchise'],
-            ] as [string, string][]).map(([path, label]) => (
+            {(
+              [
+                ["categories", "Categories"],
+                ["about", "About Us"],
+                ["subscription", "Subscriptions"],
+                ["features", "Key Features"],
+                // ['franchise', 'Franchise'],
+              ] as [string, string][]
+            ).map(([path, label]) => (
               <Link
                 key={path}
                 to={`/${path}`}
@@ -107,10 +114,8 @@ function Header() {
             {user ? (
               <>
                 <div className="relative">
-                  <button
-                    className="text-sm text-gray-700 hover:text-blue-600 focus:outline-none"
-                  >
-                    Hi, {user?.username || 'Franchise'}
+                  <button className="text-sm text-gray-700 hover:text-blue-600 focus:outline-none">
+                    Hi, {user?.username || "Franchise"}
                   </button>
                 </div>
                 {/* <button
@@ -163,13 +168,15 @@ function Header() {
               <div id="google_translate_element_mobile" className="w-full" />
             </div>
 
-            {([
-              ['categories', 'Categories'],
-              ['about', 'About Us'],
-              ['subscription', 'Subscriptions'],
-              ['features', 'Key Features'],
-              // ['franchise', 'Franchise'],
-            ] as [string, string][]).map(([path, label]) => (
+            {(
+              [
+                ["categories", "Categories"],
+                ["about", "About Us"],
+                ["subscription", "Subscriptions"],
+                ["features", "Key Features"],
+                // ['franchise', 'Franchise'],
+              ] as [string, string][]
+            ).map(([path, label]) => (
               <Link
                 key={path}
                 to={`/${path}`}
