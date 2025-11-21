@@ -9,7 +9,10 @@ import {
   Tooltip,
   Legend,
 } from "recharts";
-import { getFranchiseAccount, getFranchiseAccountValues } from "../../api/apiMethods";
+import {
+  getFranchiseAccount,
+  getFranchiseAccountValues,
+} from "../../api/apiMethods";
 
 interface FranchiseAccount {
   _id: string;
@@ -44,7 +47,9 @@ const PLAN_COLORS: Record<string, string> = {
 const Dashboard: React.FC = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState<boolean>(true);
-  const [accountValues, setAccountValues] = useState<AccountValues | null>(null);
+  const [accountValues, setAccountValues] = useState<AccountValues | null>(
+    null
+  );
   const [recentEarnings, setRecentEarnings] = useState<FranchiseAccount[]>([]);
   const [subscriptionData, setSubscriptionData] = useState<
     { name: string; value: number; color: string }[]
@@ -290,7 +295,10 @@ const Dashboard: React.FC = () => {
               </div>
             ) : (
               recentActivities
-                .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+                .sort(
+                  (a, b) =>
+                    new Date(b.date).getTime() - new Date(a.date).getTime()
+                )
                 .slice(0, 5)
                 .map((activity) => {
                   const Icon = activity.icon;
@@ -373,7 +381,12 @@ const Dashboard: React.FC = () => {
                     labelLine={true}
                   >
                     {subscriptionData.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={entry.color} stroke={entry.color} strokeWidth={2} />
+                      <Cell
+                        key={`cell-${index}`}
+                        fill={entry.color}
+                        stroke={entry.color}
+                        strokeWidth={2}
+                      />
                     ))}
                   </Pie>
                   <Tooltip
@@ -862,7 +875,8 @@ export default Dashboard;
 // };
 
 // export default Dashboard;
-{/* <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+{
+  /* <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
   <div className="flex items-center justify-between mb-6">
     <div className="flex items-center">
       <div className="p-2 bg-purple-100 rounded-lg mr-3">
@@ -943,7 +957,8 @@ export default Dashboard;
       </div>
     </div>
   )}
-</div> */}
+</div> */
+}
 // import React, { useEffect, useState } from 'react';
 // import { Calendar, Users, CheckCircle, DollarSign, Star, Clock, User, Monitor, CreditCard, Wrench } from 'lucide-react';
 // import { useNavigate } from 'react-router-dom';

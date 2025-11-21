@@ -21,66 +21,69 @@ const endpoints: any = {
     url: () => `/api/franchiseAuth/updateFranchise`,
   },
 
-
-      createCompanyReview: {
+  createCompanyReview: {
     method: "post",
-    url:"/api/companyReview/createReview"
+    url: "/api/companyReview/createReview",
   },
 
-    getAllCategories: {
+  getAllCategories: {
     method: "get",
     url: () => {
       return `/api/categories/get`;
     },
   },
 
-   getPlans: {
+  getPlans: {
     method: "get",
     url: () => {
       return `/api/subscriptions/plans`;
-    }
-  },
-  
-  getAllPincodes: {
-    method: "get",
-    url: () => `/api/pincodes/allAreas`
+    },
   },
 
-  registerTechByFranchise:{
-    method:'post',
-    url: () => `/api/techAuth/registerByFranchise`
-  },
-   addTechSubscriptionPlan: {
-    method: "post",
-    url: () => `/api/technicianSubscription/addTechSubscriptionPlan`
-  },
-   getAllTechniciansByFranchise: {
+  getAllPincodes: {
     method: "get",
-    url: (franchiseId: string) => `/api/techAuth/getTechProfilesByFranchiseId/${franchiseId}`
+    url: () => `/api/pincodes/allAreas`,
+  },
+
+  registerTechByFranchise: {
+    method: "post",
+    url: () => `/api/techAuth/registerByFranchise`,
+  },
+  addTechSubscriptionPlan: {
+    method: "post",
+    url: () => `/api/technicianSubscription/addTechSubscriptionPlan`,
+  },
+  getAllTechniciansByFranchise: {
+    method: "get",
+    url: (franchiseId: string) =>
+      `/api/techAuth/getTechProfilesByFranchiseId/${franchiseId}`,
   },
   updateTechByFranchise: {
     method: "put",
-    url: () => `/api/techAuth/updateTechByFranchaise`
+    url: () => `/api/techAuth/updateTechByFranchaise`,
   },
 
   getFranchisePlans: {
     method: "get",
-    url: () => `/api/franchiseSubscription/franchisePlans`
+    url: () => `/api/franchiseSubscription/franchisePlans`,
   },
 
   getFranchiseSubscriptionPlan: {
     method: "get",
-    url: (franchiseId: string) => `/api/franchiseSubscriptionDetails/getFranchiseSubscriptionPlan/${franchiseId}`
+    url: (franchiseId: string) =>
+      `/api/franchiseSubscriptionDetails/getFranchiseSubscriptionPlan/${franchiseId}`,
   },
 
   getFranchiseAccount: {
-    method: 'get',
-    url:(franchiseId:string) => `/api/franchiseAccounts/getFranchiseAccount/${franchiseId}`
+    method: "get",
+    url: (franchiseId: string) =>
+      `/api/franchiseAccounts/getFranchiseAccount/${franchiseId}`,
   },
 
-  getFranchiseAccountValues:{
-    method: 'get',
-    url:(franchiseId: string) => `/api/franchiseAccounts/getFranchiseAccountValues/${franchiseId}`
-  }
-}
+  getFranchiseAccountValues: {
+    method: "get",
+    url: (franchiseId: string) =>
+      `/api/franchiseAccounts/getFranchiseAccountValues/${franchiseId}`,
+  },
+};
 export default endpoints;
